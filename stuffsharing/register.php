@@ -4,6 +4,11 @@ session_start();
 
 // Adapted from https://www.phpro.org/tutorials/Basic-Login-Authentication-with-PHP-and-MySQL.html
 
+$username = isset($_POST["username"]) ? $_POST["username"] : "";
+$password = isset($_POST["password"]) ? $_POST["password"] : "";
+$email = isset($_POST["email"]) ? $_POST["email"] : "";
+$contact = isset($_POST["contact"]) ? $_POST["contact"] : "";
+
 if (!isset($_POST["username"], $_POST["password"], $_POST["form_token"])) {
     $message = "Please enter a username, password and email";
 
@@ -26,10 +31,8 @@ if (!isset($_POST["username"], $_POST["password"], $_POST["form_token"])) {
     $message = "Invalid Email";
 
 } else {
-    $username = $_POST["username"];
-    $password = sha1($_POST["password"]);
-    $email = $_POST["email"];
-    $contact = empty($_POST["contact"]) ? NULL : $_POST["contact"];
+    $password = sha1($password);
+    $contact = empty($contact) ? NULL : $contact;
 
     try {
         $stmt = $db->prepare("INSERT INTO ss_user (username, password, email, contact) VALUES (:username, :password, :email, :contact);");
@@ -66,7 +69,7 @@ $_SESSION['form_token'] = $form_token;
         <fieldset>
             <p>
                 <label for="username">Username</label>
-                <input type="text" name="username" value="<?=$_POST["username"]?>" maxlength="20" />
+                <input type="text" name="username" value="<?=$username?>" maxlength="20" />
             </p>
             <p>
                 <label for="password">Password</label>
@@ -74,11 +77,11 @@ $_SESSION['form_token'] = $form_token;
             </p>
             <p>
                 <label for="email">Email</label>
-                <input type="email" name="email" value="<?=$_POST["email"]?>" maxlength="255" />
+                <input type="email" name="email" value="<?=$email?>" maxlength="255" />
             </p>
             <p>
                 <label for="contact">Contact number</label>
-                <input type="number" name="contact" value="<?=$_POST["contact"]?>" maxlength="8" />
+                <input type="number" name="contact" value="<?=$contact?>" maxlength="8" />
             </p>
             <p>
                 <input type="hidden" name="form_token" value="<?=$form_token?>" />
