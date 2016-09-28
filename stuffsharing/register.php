@@ -47,7 +47,8 @@ if (!isset($_POST["register_token"])) {
         $contact = empty($contact) ? NULL : $contact;
 
         try {
-            $stmt = $db->prepare("INSERT INTO ss_user (username, password, email, contact) VALUES (:username, :password, :email, :contact);");
+            $stmt = $db->prepare("INSERT INTO ss_user (username, password, email, contact)
+                                  VALUES (:username, :password, :email, :contact);");
 
             $stmt->bindParam(':username', $username, PDO::PARAM_STR);
             $stmt->bindParam(':password', $password, PDO::PARAM_STR, 40);
