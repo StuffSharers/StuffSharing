@@ -23,6 +23,8 @@ define("DB_NAME", "stuffsharing");
 
    Change the value of `DB_PASS` if you used a different password in step 1.
 
-5. Verify correct setup by visiting `<BitnamiHost>/stuffsharing` in your browser, e.g. <http://localhost:8080/stuffsharing> or <http://localhost/stuffsharing> depending on your server config.
+5. Execute `schema.sql` in the database `stuffsharing` using phpPgAdmin under the SQL tab.
 
-6. Indent using 4 spaces when editing PHP files!
+6. Verify correct setup by visiting `<BitnamiHost>/stuffsharing` in your browser, e.g. <http://localhost:8080/stuffsharing> or <http://localhost/stuffsharing> depending on your server config.
+
+7. Indent using 4 spaces when editing PHP files!
