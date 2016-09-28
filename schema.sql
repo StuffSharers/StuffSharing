@@ -29,9 +29,43 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 SET search_path = public, pg_catalog;
 
+--
+-- Name: ss_stuff_sid_seq; Type: SEQUENCE; Schema: public; Owner: stuffsharers
+--
+
+CREATE SEQUENCE ss_stuff_sid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE ss_stuff_sid_seq OWNER TO stuffsharers;
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
+
+--
+-- Name: ss_stuff; Type: TABLE; Schema: public; Owner: stuffsharers
+--
+
+CREATE TABLE ss_stuff (
+    sid integer DEFAULT nextval('ss_stuff_sid_seq'::regclass) NOT NULL,
+    uid integer NOT NULL,
+    name character varying(255) NOT NULL,
+    available boolean DEFAULT true NOT NULL,
+    pref_price money,
+    pickup_date date NOT NULL,
+    return_date date NOT NULL,
+    pickup_locn character varying(255) NOT NULL,
+    return_locn character varying(255) NOT NULL,
+    CONSTRAINT ss_stuff_check CHECK ((return_date > pickup_date))
+);
+
+
+ALTER TABLE ss_stuff OWNER TO stuffsharers;
 
 --
 -- Name: ss_user; Type: TABLE; Schema: public; Owner: stuffsharers
@@ -79,6 +113,21 @@ ALTER TABLE ONLY ss_user ALTER COLUMN uid SET DEFAULT nextval('ss_user_uid_seq':
 
 
 --
+-- Data for Name: ss_stuff; Type: TABLE DATA; Schema: public; Owner: stuffsharers
+--
+
+COPY ss_stuff (sid, uid, name, available, pref_price, pickup_date, return_date, pickup_locn, return_locn) FROM stdin;
+\.
+
+
+--
+-- Name: ss_stuff_sid_seq; Type: SEQUENCE SET; Schema: public; Owner: stuffsharers
+--
+
+SELECT pg_catalog.setval('ss_stuff_sid_seq', 1, false);
+
+
+--
 -- Data for Name: ss_user; Type: TABLE DATA; Schema: public; Owner: stuffsharers
 --
 
@@ -93,6 +142,14 @@ COPY ss_user (uid, username, password, email, contact, join_date, is_admin) FROM
 --
 
 SELECT pg_catalog.setval('ss_user_uid_seq', 2, true);
+
+
+--
+-- Name: ss_stuff_pkey; Type: CONSTRAINT; Schema: public; Owner: stuffsharers
+--
+
+ALTER TABLE ONLY ss_stuff
+    ADD CONSTRAINT ss_stuff_pkey PRIMARY KEY (sid, uid);
 
 
 --
@@ -117,6 +174,14 @@ ALTER TABLE ONLY ss_user
 
 ALTER TABLE ONLY ss_user
     ADD CONSTRAINT ss_user_username_key UNIQUE (username);
+
+
+--
+-- Name: ss_stuff_uid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: stuffsharers
+--
+
+ALTER TABLE ONLY ss_stuff
+    ADD CONSTRAINT ss_stuff_uid_fkey FOREIGN KEY (uid) REFERENCES ss_user(uid) ON DELETE CASCADE;
 
 
 --
