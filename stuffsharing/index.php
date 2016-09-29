@@ -2,6 +2,13 @@
 require("include/db.php");
 session_start();
 
+try {
+    $results = $db->query("SELECT name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE is_available = true;");
+
+} catch (PDOException $e) {
+    die("We are unable to process your request. Please try again later.");
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -76,7 +83,7 @@ session_start();
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header">Available Stuff
-                    <small>Secondary Text</small>
+                    <small><?=$results->rowCount()?> items</small>
                 </h1>
             </div>
         </div>
@@ -84,40 +91,22 @@ session_start();
 
         <!-- Projects Row -->
         <div class="row">
-            <div class="col-md-4 portfolio-item">
-                <a href="#">
-                    <img class="img-responsive" src="http://placehold.it/700x400" alt="">
-                </a>
-                <h3>
-                    <a href="#">Project Name</a>
-                </h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-            </div>
-            <div class="col-md-4 portfolio-item">
-                <a href="#">
-                    <img class="img-responsive" src="http://placehold.it/700x400" alt="">
-                </a>
-                <h3>
-                    <a href="#">Project Name</a>
-                </h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-            </div>
-            <div class="col-md-4 portfolio-item">
-                <a href="#">
-                    <img class="img-responsive" src="http://placehold.it/700x400" alt="">
-                </a>
-                <h3>
-                    <a href="#">Project Name</a>
-                </h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-            </div>
+            <?php foreach($results as $result) {
+                echo '<div class="col-md-4 portfolio-item">';
+                echo '<a href="#"><img class="img-responsive" src="http://placehold.it/700x400" alt=""></a>';
+                echo '<h3><a href="#">'.$result["name"].'</a></h3>';
+                echo '<p>'.$result["description"].'</p>';
+                echo '<p>Pickup: '.$result["pickup_date"].' at '.$result["pickup_locn"].'<br />';
+                echo 'Return: '.$result["return_date"].' at '.$result["return_locn"].'</p>';
+                echo '</div>';
+            } ?>
         </div>
         <!-- /.row -->
 
         <hr>
 
         <!-- Pagination -->
-        <div class="row text-center">
+        <!-- <div class="row text-center">
             <div class="col-lg-12">
                 <ul class="pagination">
                     <li>
@@ -143,10 +132,10 @@ session_start();
                     </li>
                 </ul>
             </div>
-        </div>
+        </div> -->
         <!-- /.row -->
 
-        <hr>
+        <!-- <hr> -->
 
         <!-- Footer -->
         <footer>

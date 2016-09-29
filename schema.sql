@@ -118,6 +118,9 @@ ALTER TABLE ONLY ss_user ALTER COLUMN uid SET DEFAULT nextval('ss_user_uid_seq':
 --
 
 COPY ss_stuff (sid, uid, name, description, is_available, pref_price, pickup_date, return_date, pickup_locn, return_locn) FROM stdin;
+1	1	Google Bottle	Red; from Orbital 2015	t	\N	2016-09-30	2016-10-10	NUS SoC	NUS SoC
+2	1	Striped Red Shirt	Medium size	t	\N	2016-09-30	2016-10-10	NUS SoC	NUS SoC
+3	1	CS2102 Notes	Made with love	t	\N	2016-09-30	2016-10-10	NUS SoC	NUS SoC
 \.
 
 
@@ -125,7 +128,7 @@ COPY ss_stuff (sid, uid, name, description, is_available, pref_price, pickup_dat
 -- Name: ss_stuff_sid_seq; Type: SEQUENCE SET; Schema: public; Owner: stuffsharers
 --
 
-SELECT pg_catalog.setval('ss_stuff_sid_seq', 1, false);
+SELECT pg_catalog.setval('ss_stuff_sid_seq', 3, true);
 
 
 --
