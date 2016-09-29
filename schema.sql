@@ -55,7 +55,8 @@ CREATE TABLE ss_stuff (
     sid integer DEFAULT nextval('ss_stuff_sid_seq'::regclass) NOT NULL,
     uid integer NOT NULL,
     name character varying(255) NOT NULL,
-    available boolean DEFAULT true NOT NULL,
+    description text,
+    is_available boolean DEFAULT true NOT NULL,
     pref_price money,
     pickup_date date NOT NULL,
     return_date date NOT NULL,
@@ -116,7 +117,7 @@ ALTER TABLE ONLY ss_user ALTER COLUMN uid SET DEFAULT nextval('ss_user_uid_seq':
 -- Data for Name: ss_stuff; Type: TABLE DATA; Schema: public; Owner: stuffsharers
 --
 
-COPY ss_stuff (sid, uid, name, available, pref_price, pickup_date, return_date, pickup_locn, return_locn) FROM stdin;
+COPY ss_stuff (sid, uid, name, description, is_available, pref_price, pickup_date, return_date, pickup_locn, return_locn) FROM stdin;
 \.
 
 
