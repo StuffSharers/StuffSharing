@@ -3,6 +3,25 @@
 session_start();
 session_unset();
 session_destroy();
+
+if (isset($_GET["redirect"])) {
+    switch($_GET["redirect"]) {
+        case "main":
+        $redirect = "./";
+        break;
+
+        default:
+        $redirect = false;
+    }
+} else {
+    $redirect = false;
+}
+
+if ($redirect != false) {
+    header('Location: '.$redirect);
+    die();
+}
+
 ?>
 <html>
 <head>

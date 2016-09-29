@@ -9,6 +9,19 @@ $success = false;
 $username = isset($_POST["username"]) ? $_POST["username"] : "";
 $password = isset($_POST["password"]) ? $_POST["password"] : "";
 
+if (isset($_GET["redirect"])) {
+    switch($_GET["redirect"]) {
+        case "main":
+        $redirect = "./";
+        break;
+
+        default:
+        $redirect = false;
+    }
+} else {
+    $redirect = false;
+}
+
 if (isset($_SESSION["uid"])) {
     try {
         $stmt = $db->prepare("SELECT username FROM ss_user WHERE uid = :uid;");
@@ -69,6 +82,11 @@ if (isset($_SESSION["uid"])) {
         }
 
     }
+}
+
+if ($success && $redirect != false) {
+    header('Location: '.$redirect);
+    die();
 }
 
 $login_token = md5(uniqid('auth', true));
