@@ -91,15 +91,16 @@ try {
 
         <!-- Projects Row -->
         <div class="row">
-            <?php foreach($results as $result) {
-                echo '<div class="col-md-4 portfolio-item">';
-                echo '<a href="#"><img class="img-responsive" src="http://placehold.it/700x400" alt=""></a>';
-                echo '<h3><a href="#">'.$result["name"].'</a></h3>';
-                echo '<p>'.$result["description"].'</p>';
-                echo '<p>Pickup: '.$result["pickup_date"].' at '.$result["pickup_locn"].'<br />';
-                echo 'Return: '.$result["return_date"].' at '.$result["return_locn"].'</p>';
-                echo '</div>';
-            } ?>
+
+            <?php foreach($results as $result): ?><div class="col-md-4 portfolio-item">
+                <a href="#"><img class="img-responsive" src="http://placehold.it/700x400" alt=""></a>
+                <h3><a href="#"><?=$result["name"]?></a></h3>
+                <p><?=$result["description"]?></p>
+                <p>Pickup: <?=$result["pickup_date"]?> at <?=$result["pickup_locn"]?><br />
+                Return: <?=$result["return_date"]?> at <?=$result["return_locn"]?></p>
+            </div>
+            <?php endforeach; ?>
+
         </div>
         <!-- /.row -->
 
