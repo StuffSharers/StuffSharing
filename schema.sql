@@ -29,6 +29,24 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 SET search_path = public, pg_catalog;
 
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: ss_bid; Type: TABLE; Schema: public; Owner: stuffsharers
+--
+
+CREATE TABLE ss_bid (
+    sid integer NOT NULL,
+    uid integer NOT NULL,
+    bid_amt money DEFAULT 0.00 NOT NULL,
+    bid_time timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE ss_bid OWNER TO stuffsharers;
+
 --
 -- Name: ss_stuff_sid_seq; Type: SEQUENCE; Schema: public; Owner: stuffsharers
 --
@@ -42,10 +60,6 @@ CREATE SEQUENCE ss_stuff_sid_seq
 
 
 ALTER TABLE ss_stuff_sid_seq OWNER TO stuffsharers;
-
-SET default_tablespace = '';
-
-SET default_with_oids = false;
 
 --
 -- Name: ss_stuff; Type: TABLE; Schema: public; Owner: stuffsharers
@@ -114,6 +128,14 @@ ALTER TABLE ONLY ss_user ALTER COLUMN uid SET DEFAULT nextval('ss_user_uid_seq':
 
 
 --
+-- Data for Name: ss_bid; Type: TABLE DATA; Schema: public; Owner: stuffsharers
+--
+
+COPY ss_bid (sid, uid, bid_amt, bid_time) FROM stdin;
+\.
+
+
+--
 -- Data for Name: ss_stuff; Type: TABLE DATA; Schema: public; Owner: stuffsharers
 --
 
@@ -149,11 +171,19 @@ SELECT pg_catalog.setval('ss_user_uid_seq', 2, true);
 
 
 --
+-- Name: ss_bid_pkey; Type: CONSTRAINT; Schema: public; Owner: stuffsharers
+--
+
+ALTER TABLE ONLY ss_bid
+    ADD CONSTRAINT ss_bid_pkey PRIMARY KEY (sid, uid);
+
+
+--
 -- Name: ss_stuff_pkey; Type: CONSTRAINT; Schema: public; Owner: stuffsharers
 --
 
 ALTER TABLE ONLY ss_stuff
-    ADD CONSTRAINT ss_stuff_pkey PRIMARY KEY (sid, uid);
+    ADD CONSTRAINT ss_stuff_pkey PRIMARY KEY (sid);
 
 
 --
@@ -181,6 +211,22 @@ ALTER TABLE ONLY ss_user
 
 
 --
+-- Name: ss_bid_sid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: stuffsharers
+--
+
+ALTER TABLE ONLY ss_bid
+    ADD CONSTRAINT ss_bid_sid_fkey FOREIGN KEY (sid) REFERENCES ss_stuff(sid) ON DELETE CASCADE;
+
+
+--
+-- Name: ss_bid_uid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: stuffsharers
+--
+
+ALTER TABLE ONLY ss_bid
+    ADD CONSTRAINT ss_bid_uid_fkey FOREIGN KEY (uid) REFERENCES ss_user(uid) ON DELETE CASCADE;
+
+
+--
 -- Name: ss_stuff_uid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: stuffsharers
 --
 
@@ -189,11 +235,12 @@ ALTER TABLE ONLY ss_stuff
 
 
 --
--- Name: public; Type: ACL; Schema: -; Owner: postgres
+-- Name: public; Type: ACL; Schema: -; Owner: stuffsharers
 --
 
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
-REVOKE ALL ON SCHEMA public FROM postgres;
+REVOKE ALL ON SCHEMA public FROM stuffsharers;
+GRANT ALL ON SCHEMA public TO stuffsharers;
 GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
