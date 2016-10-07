@@ -6,7 +6,7 @@ $is_authed = false;
 
 if (isset($_SESSION["uid"])) {
     try {
-        $stmt = $db->prepare("SELECT username FROM ss_user WHERE uid = :uid;");
+        $stmt = $db->prepare("SELECT username, email, contact FROM ss_user WHERE uid = :uid;");
 
         $stmt->bindParam(':uid', $_SESSION["uid"], PDO::PARAM_INT);
 
@@ -18,6 +18,8 @@ if (isset($_SESSION["uid"])) {
         }
 
         $username = $result["username"];
+        $email = $result["email"];
+        $contact = $result["contact"];
         $is_authed = true;
 
     } catch (PDOException $e) {

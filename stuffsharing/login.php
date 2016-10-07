@@ -15,6 +15,10 @@ if (isset($_GET["redirect"])) {
         $redirect = "./";
         break;
 
+        case "editprofile":
+        $redirect = "./editprofile.php";
+        break;
+
         default:
         $redirect = false;
     }
