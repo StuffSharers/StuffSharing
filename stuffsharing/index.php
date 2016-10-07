@@ -23,6 +23,12 @@ try {
 
     <title>StuffSharing | a place to share stuff</title>
 
+    <!-- jQuery -->
+    <script src="resources/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="resources/js/bootstrap.min.js"></script>
+
     <!-- Bootstrap Core CSS -->
     <link href="resources/css/bootstrap.min.css" rel="stylesheet">
 
@@ -161,12 +167,6 @@ try {
 
     </div>
     <!-- /.container -->
-
-    <!-- jQuery -->
-    <script src="resources/js/jquery.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="resources/js/bootstrap.min.js"></script>
 
 </body>
 
