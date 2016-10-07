@@ -1,6 +1,6 @@
 <?php
-require("include/db.php");
-session_start();
+require_once("include/db.php");
+require("include/auth.php");
 
 // Adapted from https://www.phpro.org/tutorials/Basic-Login-Authentication-with-PHP-and-MySQL.html
 
@@ -22,28 +22,8 @@ if (isset($_GET["redirect"])) {
     $redirect = false;
 }
 
-if (isset($_SESSION["uid"])) {
-    try {
-        $stmt = $db->prepare("SELECT username FROM ss_user WHERE uid = :uid;");
-
-        $stmt->bindParam(':uid', $_SESSION["uid"], PDO::PARAM_INT);
-
-        $stmt->execute();
-        $result = $stmt->fetch();
-
-        if ($result == false) {
-            throw new Exception("Unknown uid in session");
-        }
-
-        $username = $result["username"];
-        $success = true;
-
-    } catch (Exception $e) {
-        $message = "We are unable to process your request. Please try again later.";
-        session_unset();
-        session_destroy();
-        session_start();
-    }
+if ($is_authed) {
+    $success = true;
 
 } else {
     if (!isset($_POST["login_token"])) {

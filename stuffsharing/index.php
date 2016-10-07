@@ -1,6 +1,6 @@
 <?php
-require("include/db.php");
-session_start();
+require_once("include/db.php");
+require("include/auth.php");
 
 try {
     $results = $db->query("SELECT name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE is_available = true;");
@@ -28,6 +28,9 @@ try {
 
     <!-- Custom CSS -->
     <link href="resources/css/3-col-portfolio.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="resources/css/font-awesome.min.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -62,13 +65,21 @@ try {
                     <li>
                         <a href="#">Advertise</a>
                     </li>
-                    <li>
-<?php if (isset($_SESSION["uid"])): ?>
-                        <a href="logout.php?redirect=main">Logout</a>
-<?php else: ?>
-                        <a href="login.php?redirect=main">Login</a>
-<?php endif ?>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+<?php if ($is_authed): ?>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i> <?=$username?> <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="editprofile.php"><i class="fa fa-cog" aria-hidden="true"></i> Edit Profile</a></li>
+                            <li><a href="logout.php?redirect=main"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
+                        </ul>
                     </li>
+<?php else: ?>
+                    <li>
+                        <a href="login.php?redirect=main"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</a>
+                    </li>
+<?php endif ?>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->

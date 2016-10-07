@@ -1,5 +1,5 @@
 <?php
-require("include/db.php");
+require_once("include/db.php");
 session_start();
 
 // Adapted from https://www.phpro.org/tutorials/Basic-Login-Authentication-with-PHP-and-MySQL.html
