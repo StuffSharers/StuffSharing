@@ -47,7 +47,7 @@ try {
         </div>
         <!-- /.row -->
 
-        <hr>
+        <!-- <hr> -->
 
         <!-- Pagination -->
         <!-- <div class="row text-center">
@@ -79,17 +79,7 @@ try {
         </div> -->
         <!-- /.row -->
 
-        <!-- <hr> -->
-
-        <!-- Footer -->
-        <footer>
-            <div class="row">
-                <div class="col-lg-12">
-                    <p>Copyright &copy; StuffSharers 2016</p>
-                </div>
-            </div>
-            <!-- /.row -->
-        </footer>
+<?php include("partials/footer.html") ?>
 
     </div>
     <!-- /.container -->
