@@ -35,12 +35,26 @@ try {
         <!-- Projects Row -->
         <div class="row">
 
-            <?php foreach($results as $result): ?><div class="col-md-4 portfolio-item">
+            <?php foreach($results as $result): ?><div class="col-md-4 col-sm-6 portfolio-item">
                 <a href="#"><img class="img-responsive" src="http://placehold.it/700x400" alt=""></a>
                 <h3><a href="#"><?=$result["name"]?></a></h3>
                 <p><?=$result["description"]?></p>
-                <p>Pickup: <?=$result["pickup_date"]?> at <?=$result["pickup_locn"]?><br />
-                Return: <?=$result["return_date"]?> at <?=$result["return_locn"]?></p>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <dl>
+                            <dt>Pickup:</dt>
+                            <dd><i class="fa fa-fw fa-calendar-check-o" aria-hidden="true"></i> <?=date("D d M", strtotime($result["pickup_date"]))?></dd>
+                            <dd><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <?=$result["pickup_locn"]?></dd>
+                        </dl>
+                    </div>
+                    <div class="col-xs-6">
+                        <dl>
+                            <dt>Return:</dt>
+                            <dd><i class="fa fa-fw fa-calendar-check-o" aria-hidden="true"></i> <?=date("D d M", strtotime($result["return_date"]))?></dd>
+                            <dd><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <?=$result["return_locn"]?></dd>
+                        </dl>
+                    </div>
+                </div>
             </div>
             <?php endforeach; ?>
 
