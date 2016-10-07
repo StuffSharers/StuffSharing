@@ -32,50 +32,99 @@ if (!$is_authed) {
         </div>
         <!-- /.row -->
 
-        <form method="POST">
-
         <!-- Input Row -->
         <div class="row">
 
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Account details</h3>
+            <form method="POST">
+            <div class="col-md-9 col-sm-8">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-asterisk" aria-hidden="true"></i> Account details</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label for="username">Username:</label>
+                                    <input type="text" class="form-control" id="username" name="username" value="<?=$username?>" placeholder="4-20 alphanumeric characters" maxlength="20" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email:</label>
+                                    <input type="email" class="form-control" id="email" name="email" value="<?=$email?>" placeholder="Must be valid" maxlength="255" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="contact">Contact number:</label>
+                                    <input type="number" class="form-control" id="contact" name="contact" value="<?=$contact?>" placeholder="8 digits" maxlength="8" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <label for="username">Username:</label>
-                            <input type="text" class="form-control" id="username" name="username" value="<?=$username?>" maxlength="20" />
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email:</label>
-                            <input type="email" class="form-control" id="email" name="email" value="<?=$email?>" maxlength="255" />
-                        </div>
-                        <div class="form-group">
-                            <label for="contact">Contact number:</label>
-                            <input type="number" class="form-control" id="contact" name="contact" value="<?=$contact?>" maxlength="8" />
+                    <div class="col-md-5">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-key" aria-hidden="true"></i> Change password</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label for="password">Current password:</label>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Required to change password" maxlength="20" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="new_password">New password:</label>
+                                    <input type="password" class="form-control" id="new_password" name="new_password" placeholder="4-20 characters" maxlength="20" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirm_new_password">Confirm new password:</label>
+                                    <input type="password" class="form-control" id="confirm_new_password" placeholder="Must match above" maxlength="20" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Change password</h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="pull-right">
+                        <button type="reset" class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i> Reset</button>
+                        &nbsp;
+                        <button type="submit" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i> Save</button>
+                        </div>
                     </div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <label for="password">Current password:</label>
-                            <input type="password" class="form-control" id="password" name="password" maxlength="20" />
+                </div>
+                <div class="hidden-lg hidden-md hidden-sm">&nbsp;</div>
+            </div>
+            </form>
+
+            <div class="col-md-3 col-sm-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-info-circle" aria-hidden="true"></i> Account info</h3>
+                            </div>
+                            <div class="panel-body">
+                                <dl>
+                                    <dt>Join date:</dt>
+                                    <dd><?=date("D, d M Y g:ia", strtotime($join_date))?></dd><br />
+                                    <dt>Account type:</dt>
+                                    <dd><?=$is_admin ? "Admin" : "Normal"?></dd>
+                                </dl>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="new_password">New password:</label>
-                            <input type="password" class="form-control" id="new_password" name="new_password" maxlength="20" />
-                        </div>
-                        <div class="form-group">
-                            <label for="confirm_new_password">Confirm new password:</label>
-                            <input type="password" class="form-control" id="confirm_new_password" maxlength="20" />
+                    </div>
+                    <div class="col-md-12">
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-trash" aria-hidden="true"></i> Delete account</h3>
+                            </div>
+                            <div class="panel-body">
+                            <form action="deleteprofile.php" method="POST">
+                                <div class="form-group">
+                                    <label for="confirm_delete">Confirm:</label>
+                                    <input type="text" class="form-control" id="confirm_delete" name="confirm_delete" placeholder="Please delete my account!" />
+                                </div>
+                                <button type="submit" class="btn btn-block btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Delete my account</button>
+                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -83,16 +132,6 @@ if (!$is_authed) {
 
         </div>
         <!-- /.row -->
-
-        <!-- Button Row -->
-        <div class="row">
-            <div class="col-lg-12">
-                <button type="submit" class="btn btn-default pull-right"><i class="fa fa-check" aria-hidden="true"></i> Save</button>
-            </div>
-        </div>
-        <!-- /.row -->
-
-        </form>
 
 <?php include("partials/footer.html") ?>
 

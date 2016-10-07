@@ -6,4 +6,5 @@ try {
 } catch (PDOException $e) {
     die($e->getMessage());
 }
+date_default_timezone_set("Asia/Singapore");
 ?>
