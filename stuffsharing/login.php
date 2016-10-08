@@ -14,13 +14,13 @@ if ($is_authed) {
     $password = isset($_POST["password"]) ? $_POST["password"] : "";
 
     if (!isset($_POST["login_token"])) {
-        $message = "Please enter your details";
+        $message = "<li class=\"list-group-item list-group-item-info\">Please enter your details</li>";
 
     } elseif ($_POST["login_token"] != $_SESSION["login_token"]) {
-        $message = "Invalid form submission";
+        $message = "<li class=\"list-group-item list-group-item-danger\">Invalid form submission</li>";
 
     } elseif (empty($username) || strlen($username) > 255 || strlen($password) > 20 || strlen($password) < 4) {
-        $message = "Access denied";
+        $message = "<li class=\"list-group-item list-group-item-danger\">Access denied</li>";
 
     } else {
         $password = sha1($password);
@@ -36,7 +36,7 @@ if ($is_authed) {
             $result = $stmt->fetch();
 
             if ($result == false) {
-                $message = "Access denied";
+                $message = "<li class=\"list-group-item list-group-item-danger\">Access denied</li>";
 
             } else {
                 $_SESSION["uid"] = $result["uid"];
@@ -45,7 +45,7 @@ if ($is_authed) {
             }
 
         } catch (PDOException $e) {
-            $message = "We are unable to process your request. Please try again later.";
+            $message = "<li class=\"list-group-item list-group-item-danger\">We are unable to process your request. Please try again later.</li>";
         }
 
     }
@@ -90,14 +90,14 @@ if ($success && $redirect != false) {
                         <h3 class="panel-title"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</h3>
                     </div>
                     <div class="panel-body">
-                        <div class="well well-sm">
+                        <ul class="list-group">
 <?php if ($success): ?>
-                            You are logged in as <b><?=$username?></b>. <a href="logout.php?redirect=main">Logout</a>
-                        </div>
+                            <li class="list-group-item">You are logged in as <b><?=$username?></b>. <a href="logout.php?redirect=main">Logout</a></li>
+                        </ul>
 <?php else: ?>
                             <?=$message?>
 
-                        </div>
+                        </ul>
                         <form method="POST">
                             <div class="form-group">
                                 <label for="username">Username/Email:</label>
@@ -109,7 +109,7 @@ if ($success && $redirect != false) {
                             </div>
                             <!-- <div class="form-group"> -->
                                 <input type="hidden" name="login_token" value="<?=$login_token?>" />
-                                <button type="submit" class="btn btn-default pull-right"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</button>
+                                <button type="submit" class="btn btn-success pull-right"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</button>
                             <!-- </div> -->
                         </form>
 <?php endif ?>

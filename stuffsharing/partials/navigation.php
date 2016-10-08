@@ -34,6 +34,9 @@
                     <li>
                         <a href="login.php?redirect=main"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</a>
                     </li>
+                    <li>
+                        <a href="register.php"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a>
+                    </li>
 <?php endif ?>
                 </ul>
             </div>

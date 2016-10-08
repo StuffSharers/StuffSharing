@@ -43,9 +43,9 @@ if ($redirect != false) {
                         <h3 class="panel-title"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</h3>
                     </div>
                     <div class="panel-body">
-                        <div class="well well-sm">
-                            Logged out! <a href="login.php?redirect=main">Login</a>
-                        </div>
+                        <ul class="list-group">
+                            <li class="list-group-item list-group-item-success">Logged out! <a href="login.php?redirect=main">Login</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>

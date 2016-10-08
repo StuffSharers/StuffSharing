@@ -109,6 +109,7 @@ $_SESSION['register_token'] = $register_token;
                         </ul>
 <?php else: ?>
                             <?=$message?>
+
                         </ul>
 
                         <form method="POST">
@@ -131,7 +132,7 @@ $_SESSION['register_token'] = $register_token;
                             <div class="form-group">
                                 <em>*Required</em>
                                 <input type="hidden" name="register_token" value="<?=$register_token?>" />
-                                <button type="submit" class="btn btn-default pull-right"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</button>
+                                <button type="submit" class="btn btn-success pull-right"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</button>
                             </div>
                         </form>
 <?php endif ?>
