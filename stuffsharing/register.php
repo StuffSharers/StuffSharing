@@ -4,7 +4,6 @@ require("include/functions.php");
 
 // Adapted from https://www.phpro.org/tutorials/Basic-Login-Authentication-with-PHP-and-MySQL.html
 
-
 if (!$is_authed) {
     $success = false;
 
@@ -124,15 +123,15 @@ if (!$is_authed) {
                         <form method="POST">
                             <div class="form-group">
                                 <label for="username">Username*</label>
-                                <input type="text" class="form-control" id="username" name="username" value="<?=$last_username?>" placeholder="4-20 alphanumeric characters" maxlength="20" />
+                                <input type="text" class="form-control" id="username" name="username" value="<?=$last_username?>" placeholder="4-20 alphanumeric characters" maxlength="20" required="required" />
                             </div>
                             <div class="form-group">
                                 <label for="password">Password*</label>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="4-20 characters" maxlength="20" />
+                                <input type="password" class="form-control" id="password" name="password" placeholder="4-20 characters" maxlength="20" required="required" />
                             </div>
                             <div class="form-group">
                                 <label for="email">Email*</label>
-                                <input type="email" class="form-control" id="email" name="email" value="<?=$last_email?>" placeholder="Must be valid" maxlength="255" />
+                                <input type="email" class="form-control" id="email" name="email" value="<?=$last_email?>" placeholder="Must be valid" maxlength="255" required="required" />
                             </div>
                             <div class="form-group">
                                 <label for="contact">Contact number</label>
