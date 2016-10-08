@@ -26,16 +26,16 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i> <?=$username?> <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="editprofile.php"><i class="fa fa-cog" aria-hidden="true"></i> Edit Profile</a></li>
-                            <li><a href="logout.php?redirect=main"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
+                            <li><a href="editprofile.php"><i class="fa fa-fw fa-cog" aria-hidden="true"></i> Edit Profile</a></li>
+                            <li><a href="logout.php?redirect=main"><i class="fa fa-fw fa-sign-out" aria-hidden="true"></i> Logout</a></li>
                         </ul>
                     </li>
 <?php else: ?>
                     <li>
-                        <a href="login.php?redirect=main"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</a>
+                        <a href="login.php?redirect=main"><i class="fa fa-fw fa-sign-in" aria-hidden="true"></i> Login</a>
                     </li>
                     <li>
-                        <a href="register.php"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a>
+                        <a href="register.php"><i class="fa fa-fw fa-user-plus" aria-hidden="true"></i> Register</a>
                     </li>
 <?php endif ?>
                 </ul>
