@@ -4,82 +4,85 @@ require("include/functions.php");
 
 // Adapted from https://www.phpro.org/tutorials/Basic-Login-Authentication-with-PHP-and-MySQL.html
 
-$success = false;
 
-$username = isset($_POST["username"]) ? $_POST["username"] : "";
-$password = isset($_POST["password"]) ? $_POST["password"] : "";
-$email = isset($_POST["email"]) ? $_POST["email"] : "";
-$contact = isset($_POST["contact"]) ? $_POST["contact"] : "";
+if (!$is_authed) {
+    $success = false;
 
-$last_username = "";
-$last_email = "";
-$last_contact = "";
+    $username = isset($_POST["username"]) ? $_POST["username"] : "";
+    $password = isset($_POST["password"]) ? $_POST["password"] : "";
+    $email = isset($_POST["email"]) ? $_POST["email"] : "";
+    $contact = isset($_POST["contact"]) ? $_POST["contact"] : "";
 
-if (!isset($_POST["register_token"])) {
-    $message = "";
+    $last_username = "";
+    $last_email = "";
+    $last_contact = "";
 
-} elseif ($_POST["register_token"] != $_SESSION["register_token"]) {
-    $message = "<div class=\"alert alert-danger\" role=\"alert\">Invalid form submission</div>";
+    if (!isset($_POST["register_token"])) {
+        $message = "";
 
-} else {
-    $message = "";
+    } elseif ($_POST["register_token"] != $_SESSION["register_token"]) {
+        $message = "<div class=\"alert alert-danger\" role=\"alert\">Invalid form submission</div>";
 
-    if (strlen($username) > 20 || strlen($username) < 4 || !ctype_alnum($username)) {
-        $message .= "<div class=\"alert alert-danger\" role=\"alert\">Invalid username: must be 4-20 alphanumeric characters</div>";
-        $username = NULL;
     } else {
-        $last_username = $username;
-    }
+        $message = "";
 
-    if ((strlen($password) > 20 || strlen($password) < 4)) {
-        $message .= "<div class=\"alert alert-danger\" role=\"alert\">Invalid password: must be 4-20 characters</div>";
-        $password = NULL;
-    }
+        if (strlen($username) > 20 || strlen($username) < 4 || !ctype_alnum($username)) {
+            $message .= "<div class=\"alert alert-danger\" role=\"alert\">Invalid username: must be 4-20 alphanumeric characters</div>";
+            $username = NULL;
+        } else {
+            $last_username = $username;
+        }
 
-    if (empty($email) || strlen($email) > 255 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $message .= "<div class=\"alert alert-danger\" role=\"alert\">Invalid email</div>";
-        $email = NULL;
-    } else {
-        $last_email = $email;
-    }
+        if ((strlen($password) > 20 || strlen($password) < 4)) {
+            $message .= "<div class=\"alert alert-danger\" role=\"alert\">Invalid password: must be 4-20 characters</div>";
+            $password = NULL;
+        }
 
-    if (!empty($contact) && (strlen($contact) != 8 || !ctype_digit($contact))) {
-        $message .= "<div class=\"alert alert-danger\" role=\"alert\">Invalid contact number: must be 8 digits\n</div>";
-        $contact = NULL;
-    } else {
-        $last_contact = $contact;
-    }
+        if (empty($email) || strlen($email) > 255 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $message .= "<div class=\"alert alert-danger\" role=\"alert\">Invalid email</div>";
+            $email = NULL;
+        } else {
+            $last_email = $email;
+        }
 
-    if (!is_null($username) && !is_null($password) && !is_null($email) && !is_null($contact)) {
-        $password = sha1($password);
-        $contact = empty($contact) ? NULL : $contact;
+        if (!empty($contact) && (strlen($contact) != 8 || !ctype_digit($contact))) {
+            $message .= "<div class=\"alert alert-danger\" role=\"alert\">Invalid contact number: must be 8 digits\n</div>";
+            $contact = NULL;
+        } else {
+            $last_contact = $contact;
+        }
 
-        try {
-            $stmt = $db->prepare("INSERT INTO ss_user (username, password, email, contact)
-                                  VALUES (:username, :password, :email, :contact);");
+        if (!is_null($username) && !is_null($password) && !is_null($email) && !is_null($contact)) {
+            $password = sha1($password);
+            $contact = empty($contact) ? NULL : $contact;
 
-            $stmt->bindParam(':username', $username, PDO::PARAM_STR);
-            $stmt->bindParam(':password', $password, PDO::PARAM_STR, 40);
-            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-            $stmt->bindParam(':contact', $contact, is_null($contact) ? PDO::PARAM_NULL : PDO::PARAM_INT);
+            try {
+                $stmt = $db->prepare("INSERT INTO ss_user (username, password, email, contact)
+                                      VALUES (:username, :password, :email, :contact);");
 
-            $stmt->execute();
+                $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+                $stmt->bindParam(':password', $password, PDO::PARAM_STR, 40);
+                $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+                $stmt->bindParam(':contact', $contact, is_null($contact) ? PDO::PARAM_NULL : PDO::PARAM_INT);
 
-            $success = true;
+                $stmt->execute();
 
-        } catch (PDOException $e) {
-            if ($e->getCode() == 23505) {
-                $message = "<div class=\"alert alert-danger\" role=\"alert\">Username or email already exists</div>";
-            } else {
-                $message = "<div class=\"alert alert-danger\" role=\"alert\">We are unable to process your request. Please try again later.</div>";
+                $success = true;
+
+            } catch (PDOException $e) {
+                if ($e->getCode() == 23505) {
+                    $message = "<div class=\"alert alert-danger\" role=\"alert\">Username or email already exists</div>";
+                } else {
+                    $message = "<div class=\"alert alert-danger\" role=\"alert\">We are unable to process your request. Please try again later.</div>";
+                }
             }
         }
+
     }
 
+    $register_token = md5(uniqid('auth', true));
+    $_SESSION['register_token'] = $register_token;
 }
-
-$register_token = md5(uniqid('auth', true));
-$_SESSION['register_token'] = $register_token;
 
 ?>
 <!DOCTYPE html>
@@ -111,8 +114,10 @@ $_SESSION['register_token'] = $register_token;
                         <h3 class="panel-title"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</h3>
                     </div>
                     <div class="panel-body">
-<?php if ($success): ?>
-                        <div class="alert alert-success" role="alert">Success!</div>
+<?php if ($is_authed): ?>
+                        <div class="alert alert-danger" role="alert">Please <a href="logout.php?redirect=register">logout</a> before continuing!</div>
+<?php elseif ($success): ?>
+                        <div class="alert alert-success" role="alert">Success! You may proceed to <a href="login.php?redirect=main">login</a></div>
 <?php else: ?>
                         <?=$message?>
 

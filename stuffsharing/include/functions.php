@@ -14,6 +14,10 @@ function setup_redirect() {
             $redirect = "./editprofile.php";
             break;
 
+            case "register":
+            $redirect = "./register.php";
+            break;
+
             default:
             $redirect = false;
         }
