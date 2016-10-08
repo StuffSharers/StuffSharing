@@ -1,6 +1,6 @@
 <?php
-require_once("include/db.php");
-session_start();
+require("include/auth.php");
+require("include/functions.php");
 
 // Adapted from https://www.phpro.org/tutorials/Basic-Login-Authentication-with-PHP-and-MySQL.html
 
@@ -12,7 +12,7 @@ $email = isset($_POST["email"]) ? $_POST["email"] : "";
 $contact = isset($_POST["contact"]) ? $_POST["contact"] : "";
 
 if (!isset($_POST["register_token"])) {
-    $message = "Please enter a valid username, password and email";
+    $message = "Please fill in your details.";
 
 } elseif ($_POST["register_token"] != $_SESSION["register_token"]) {
     $message = "Invalid form submission";
@@ -74,39 +74,79 @@ $register_token = md5(uniqid('auth', true));
 $_SESSION['register_token'] = $register_token;
 
 ?>
-<html>
-<head>
-    <title>Register</title>
-</head>
+<!DOCTYPE html>
+<html lang="en">
+
+<?php include("partials/head.html") ?>
+
 <body>
+
+<?php include("partials/navigation.php") ?>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <!-- Page Header -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Registration</h1>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Main Row -->
+        <div class="row">
+
+            <div class="col-lg-offset-4 col-lg-4 col-md-offset-3 col-md-6 col-sm-offset-2 col-sm-8">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-sign-in" aria-hidden="true"></i> Register</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="well well-sm">
 <?php if ($success): ?>
-    <p>Success!</p>
+                            Success!
+                        </div>
 <?php else: ?>
-    <p><?=$message?></p>
-    <form method="POST">
-        <fieldset>
-            <p>
-                <label for="username">Username</label>
-                <input type="text" name="username" value="<?=$username?>" maxlength="20" />
-            </p>
-            <p>
-                <label for="password">Password</label>
-                <input type="password" name="password" value="" maxlength="20" />
-            </p>
-            <p>
-                <label for="email">Email</label>
-                <input type="email" name="email" value="<?=$email?>" maxlength="255" />
-            </p>
-            <p>
-                <label for="contact">Contact number</label>
-                <input type="number" name="contact" value="<?=$contact?>" maxlength="8" />
-            </p>
-            <p>
-                <input type="hidden" name="register_token" value="<?=$register_token?>" />
-                <input type="submit" value="Register" />
-            </p>
-        </fieldset>
-    </form>
+                            <?=$message?>
+
+                        </div>
+                        <form method="POST">
+                            <div class="form-group">
+                                <label for="username">Username*</label>
+                                <input type="text" class="form-control" id="username" name="username" value="<?=$username?>" placeholder="4-20 alphanumeric characters" maxlength="20" />
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password*</label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="4-20 characters" maxlength="20" />
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email*</label>
+                                <input type="email" class="form-control" id="email" name="email" value="<?=$email?>" placeholder="Must be valid" maxlength="255" />
+                            </div>
+                            <div class="form-group">
+                                <label for="contact">Contact number</label>
+                                <input type="number" class="form-control" id="contact" name="contact" value="<?=$contact?>" placeholder="8 digits" maxlength="8" />
+                            </div>
+                            <div class="form-group">
+                                <em>*Required</em>
+                                <input type="hidden" name="register_token" value="<?=$register_token?>" />
+                                <button type="submit" class="btn btn-default pull-right"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</button>
+                            </div>
+                        </form>
 <?php endif ?>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+<?php include("partials/footer.html") ?>
+
+    </div>
+    <!-- /.container -->
+
 </body>
+
 </html>

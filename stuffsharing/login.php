@@ -96,6 +96,7 @@ if ($success && $redirect != false) {
                         </div>
 <?php else: ?>
                             <?=$message?>
+
                         </div>
                         <form method="POST">
                             <div class="form-group">
