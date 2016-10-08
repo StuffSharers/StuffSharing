@@ -10,12 +10,16 @@ function setup_redirect() {
             $redirect = "./";
             break;
 
+            case "register":
+            $redirect = "./register.php";
+            break;
+
             case "editprofile":
             $redirect = "./editprofile.php";
             break;
 
-            case "register":
-            $redirect = "./register.php";
+            case "deleteprofile":
+            $redirect = "./deleteprofile.php";
             break;
 
             default:

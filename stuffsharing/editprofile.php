@@ -110,20 +110,7 @@ get_profile();
                         </div>
                     </div>
                     <div class="col-md-12">
-                        <div class="panel panel-danger">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-trash" aria-hidden="true"></i> Delete account</h3>
-                            </div>
-                            <div class="panel-body">
-                            <form action="deleteprofile.php" method="POST">
-                                <div class="form-group">
-                                    <label for="confirm_delete">Confirm:</label>
-                                    <input type="text" class="form-control" id="confirm_delete" name="confirm_delete" placeholder="Please delete my account!" />
-                                </div>
-                                <button type="submit" class="btn btn-block btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Delete my account</button>
-                            </form>
-                            </div>
-                        </div>
+                        <a class="btn btn-block btn-danger" href="deleteprofile.php" role="button"><i class="fa fa-trash" aria-hidden="true"></i> Delete my account</a>
                     </div>
                 </div>
             </div>
