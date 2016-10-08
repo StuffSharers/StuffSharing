@@ -2,12 +2,7 @@
 require("include/auth.php");
 require("include/functions.php");
 
-try {
-    $results = $db->query("SELECT name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE is_available = true;");
-
-} catch (PDOException $e) {
-    die("We are unable to process your request. Please try again later.");
-}
+$results = get_available_items();
 
 ?>
 <!DOCTYPE html>

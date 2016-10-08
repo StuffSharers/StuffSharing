@@ -60,4 +60,14 @@ function get_profile() {
     }
 }
 
+function get_available_items() {
+    global $db;
+
+    try {
+        return $db->query("SELECT name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE is_available = true;");
+    } catch (PDOException $e) {
+        die("We are unable to process your request. Please try again later.");
+    }
+}
+
 ?>
