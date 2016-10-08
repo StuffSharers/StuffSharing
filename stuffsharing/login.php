@@ -101,11 +101,11 @@ if ($success && $redirect != false) {
                         <form method="POST">
                             <div class="form-group">
                                 <label for="username">Username/Email:</label>
-                                <input type="text" class="form-control" id="username" name="username" value="<?=$last_username?>" maxlength="255" />
+                                <input type="text" class="form-control" id="username" name="username" value="<?=$last_username?>" maxlength="255" required="required" />
                             </div>
                             <div class="form-group">
                                 <label for="password">Password:</label>
-                                <input type="password" class="form-control" id="password" name="password" value="" maxlength="20" />
+                                <input type="password" class="form-control" id="password" name="password" value="" maxlength="20" required="required" />
                             </div>
                             <!-- <div class="form-group"> -->
                                 <input type="hidden" name="login_token" value="<?=$login_token?>" />
