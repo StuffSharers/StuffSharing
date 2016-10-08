@@ -4,30 +4,60 @@ session_start();
 session_unset();
 session_destroy();
 
-if (isset($_GET["redirect"])) {
-    switch($_GET["redirect"]) {
-        case "main":
-        $redirect = "./";
-        break;
+require("include/auth.php");
+require("include/functions.php");
 
-        default:
-        $redirect = false;
-    }
-} else {
-    $redirect = false;
-}
-
+setup_redirect();
 if ($redirect != false) {
     header('Location: '.$redirect);
     die();
 }
 
 ?>
-<html>
-<head>
-    <title>Logout</title>
-</head>
+<!DOCTYPE html>
+<html lang="en">
+
+<?php include("partials/head.html") ?>
+
 <body>
-    <p>Logged out! <a href="login.php">Login</a></p>
+
+<?php include("partials/navigation.php") ?>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <!-- Page Header -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Authentication</h1>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Main Row -->
+        <div class="row">
+
+            <div class="col-lg-offset-4 col-lg-4 col-md-offset-3 col-md-6 col-sm-offset-2 col-sm-8">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="well well-sm">
+                            Logged out! <a href="login.php?redirect=main">Login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+<?php include("partials/footer.html") ?>
+
+    </div>
+    <!-- /.container -->
+
 </body>
+
 </html>

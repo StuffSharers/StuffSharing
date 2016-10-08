@@ -1,6 +1,6 @@
 <?php
-require_once("include/db.php");
 require("include/auth.php");
+require("include/functions.php");
 
 // Adapted from https://www.phpro.org/tutorials/Basic-Login-Authentication-with-PHP-and-MySQL.html
 
@@ -12,23 +12,6 @@ if ($is_authed) {
 
     $username = isset($_POST["username"]) ? $_POST["username"] : "";
     $password = isset($_POST["password"]) ? $_POST["password"] : "";
-
-    if (isset($_GET["redirect"])) {
-        switch($_GET["redirect"]) {
-            case "main":
-            $redirect = "./";
-            break;
-
-            case "editprofile":
-            $redirect = "./editprofile.php";
-            break;
-
-            default:
-            $redirect = false;
-        }
-    } else {
-        $redirect = false;
-    }
 
     if (!isset($_POST["login_token"])) {
         $message = "Please enter your details";
@@ -67,14 +50,15 @@ if ($is_authed) {
 
     }
 
-    if ($success && $redirect != false) {
-        header('Location: '.$redirect);
-        die();
-    }
-
     $login_token = md5(uniqid('auth', true));
     $_SESSION['login_token'] = $login_token;
-    }
+}
+
+setup_redirect();
+if ($success && $redirect != false) {
+    header('Location: '.$redirect);
+    die();
+}
 
 ?>
 <!DOCTYPE html>
@@ -92,7 +76,7 @@ if ($is_authed) {
         <!-- Page Header -->
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Authentication page</h1>
+                <h1 class="page-header">Authentication</h1>
             </div>
         </div>
         <!-- /.row -->
@@ -108,7 +92,7 @@ if ($is_authed) {
                     <div class="panel-body">
                         <div class="well well-sm">
 <?php if ($success): ?>
-                            You are already logged in as <b><?=$username?></b>. <a href="logout.php?redirect=main">Logout</a>
+                            You are logged in as <b><?=$username?></b>. <a href="logout.php?redirect=main">Logout</a>
                         </div>
 <?php else: ?>
                             <?=$message?>

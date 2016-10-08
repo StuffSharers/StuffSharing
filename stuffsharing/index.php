@@ -1,6 +1,6 @@
 <?php
-require_once("include/db.php");
 require("include/auth.php");
+require("include/functions.php");
 
 try {
     $results = $db->query("SELECT name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE is_available = true;");
@@ -32,7 +32,7 @@ try {
         </div>
         <!-- /.row -->
 
-        <!-- Projects Row -->
+        <!-- Main Row -->
         <div class="row">
 
             <?php foreach($results as $result): ?><div class="col-md-4 col-sm-6 portfolio-item">

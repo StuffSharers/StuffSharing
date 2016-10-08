@@ -1,6 +1,6 @@
 <?php
-require_once("include/db.php");
 require("include/auth.php");
+require("include/functions.php");
 
 if (!$is_authed) {
     header('Location: login.php?redirect=editprofile');
@@ -32,7 +32,7 @@ if (!$is_authed) {
         </div>
         <!-- /.row -->
 
-        <!-- Input Row -->
+        <!-- Main Row -->
         <div class="row">
 
             <form method="POST">
