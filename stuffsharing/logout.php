@@ -29,7 +29,7 @@ if ($redirect != false) {
         <!-- Page Header -->
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Authentication</h1>
+                <h1 class="page-header"></h1>
             </div>
         </div>
         <!-- /.row -->
@@ -43,9 +43,7 @@ if ($redirect != false) {
                         <h3 class="panel-title"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</h3>
                     </div>
                     <div class="panel-body">
-                        <ul class="list-group">
-                            <li class="list-group-item list-group-item-success">Logged out! <a href="login.php?redirect=main">Login</a></li>
-                        </ul>
+                        <div class="alert alert-success" role="alert">Logged out! <a href="login.php?redirect=main">Login</a></div>
                     </div>
                 </div>
             </div>

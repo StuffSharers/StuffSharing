@@ -11,36 +11,44 @@ $password = isset($_POST["password"]) ? $_POST["password"] : "";
 $email = isset($_POST["email"]) ? $_POST["email"] : "";
 $contact = isset($_POST["contact"]) ? $_POST["contact"] : "";
 
+$last_username = "";
+$last_email = "";
+$last_contact = "";
+
 if (!isset($_POST["register_token"])) {
-    $message = "<li class=\"list-group-item list-group-item-info\">Please fill in your details</li>";
+    $message = "";
 
 } elseif ($_POST["register_token"] != $_SESSION["register_token"]) {
-    $message = "<li class=\"list-group-item list-group-item-danger\">Invalid form submission</li>";
+    $message = "<div class=\"alert alert-danger\" role=\"alert\">Invalid form submission</div>";
 
 } else {
     $message = "";
 
     if (strlen($username) > 20 || strlen($username) < 4 || !ctype_alnum($username)) {
-        $message .= "<li class=\"list-group-item list-group-item-danger\">Invalid username: must be 4-20 alphanumeric characters</li>";
+        $message .= "<div class=\"alert alert-danger\" role=\"alert\">Invalid username: must be 4-20 alphanumeric characters</div>";
         $username = NULL;
+    } else {
+        $last_username = $username;
     }
 
     if ((strlen($password) > 20 || strlen($password) < 4)) {
-        $message .= "<li class=\"list-group-item list-group-item-danger\">Invalid password: must be 4-20 characters</li>";
+        $message .= "<div class=\"alert alert-danger\" role=\"alert\">Invalid password: must be 4-20 characters</div>";
         $password = NULL;
     }
 
     if (empty($email) || strlen($email) > 255 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $message .= "<li class=\"list-group-item list-group-item-danger\">Invalid email</li>";
+        $message .= "<div class=\"alert alert-danger\" role=\"alert\">Invalid email</div>";
         $email = NULL;
+    } else {
+        $last_email = $email;
     }
 
     if (!empty($contact) && (strlen($contact) != 8 || !ctype_digit($contact))) {
-        $message .= "<li class=\"list-group-item list-group-item-danger\">Invalid contact number: must be 8 digits\n</li>";
+        $message .= "<div class=\"alert alert-danger\" role=\"alert\">Invalid contact number: must be 8 digits\n</div>";
         $contact = NULL;
+    } else {
+        $last_contact = $contact;
     }
-
-    $message .= "</ul>";
 
     if (!is_null($username) && !is_null($password) && !is_null($email) && !is_null($contact)) {
         $password = sha1($password);
@@ -61,9 +69,9 @@ if (!isset($_POST["register_token"])) {
 
         } catch (PDOException $e) {
             if ($e->getCode() == 23505) {
-                $message = "Username or email already exists";
+                $message = "<div class=\"alert alert-danger\" role=\"alert\">Username or email already exists</div>";
             } else {
-                $message = "We are unable to process your request. Please try again later.";
+                $message = "<div class=\"alert alert-danger\" role=\"alert\">We are unable to process your request. Please try again later.</div>";
             }
         }
     }
@@ -89,7 +97,7 @@ $_SESSION['register_token'] = $register_token;
         <!-- Page Header -->
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Registration</h1>
+                <h1 class="page-header"></h1>
             </div>
         </div>
         <!-- /.row -->
@@ -103,19 +111,15 @@ $_SESSION['register_token'] = $register_token;
                         <h3 class="panel-title"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</h3>
                     </div>
                     <div class="panel-body">
-                        <ul class="list-group">
 <?php if ($success): ?>
-                            <li class="list-group-item list-group-item-success">Success!</li>
-                        </ul>
+                        <div class="alert alert-success" role="alert">Success!</div>
 <?php else: ?>
-                            <?=$message?>
-
-                        </ul>
+                        <?=$message?>
 
                         <form method="POST">
                             <div class="form-group">
                                 <label for="username">Username*</label>
-                                <input type="text" class="form-control" id="username" name="username" value="<?=$username?>" placeholder="4-20 alphanumeric characters" maxlength="20" />
+                                <input type="text" class="form-control" id="username" name="username" value="<?=$last_username?>" placeholder="4-20 alphanumeric characters" maxlength="20" />
                             </div>
                             <div class="form-group">
                                 <label for="password">Password*</label>
@@ -123,11 +127,11 @@ $_SESSION['register_token'] = $register_token;
                             </div>
                             <div class="form-group">
                                 <label for="email">Email*</label>
-                                <input type="email" class="form-control" id="email" name="email" value="<?=$email?>" placeholder="Must be valid" maxlength="255" />
+                                <input type="email" class="form-control" id="email" name="email" value="<?=$last_email?>" placeholder="Must be valid" maxlength="255" />
                             </div>
                             <div class="form-group">
                                 <label for="contact">Contact number</label>
-                                <input type="number" class="form-control" id="contact" name="contact" value="<?=$contact?>" placeholder="8 digits" maxlength="8" />
+                                <input type="number" class="form-control" id="contact" name="contact" value="<?=$last_contact?>" placeholder="8 digits" maxlength="8" />
                             </div>
                             <div class="form-group">
                                 <em>*Required</em>

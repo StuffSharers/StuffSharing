@@ -13,14 +13,16 @@ if ($is_authed) {
     $username = isset($_POST["username"]) ? $_POST["username"] : "";
     $password = isset($_POST["password"]) ? $_POST["password"] : "";
 
+    $last_username = "";
+
     if (!isset($_POST["login_token"])) {
-        $message = "<li class=\"list-group-item list-group-item-info\">Please enter your details</li>";
+        $message = "";
 
     } elseif ($_POST["login_token"] != $_SESSION["login_token"]) {
-        $message = "<li class=\"list-group-item list-group-item-danger\">Invalid form submission</li>";
+        $message = "<div class=\"alert alert-danger\" role=\"alert\">Invalid form submission</div>";
 
     } elseif (empty($username) || strlen($username) > 255 || strlen($password) > 20 || strlen($password) < 4) {
-        $message = "<li class=\"list-group-item list-group-item-danger\">Access denied</li>";
+        $message = "<div class=\"alert alert-danger\" role=\"alert\">Access denied</div>";
 
     } else {
         $password = sha1($password);
@@ -36,7 +38,8 @@ if ($is_authed) {
             $result = $stmt->fetch();
 
             if ($result == false) {
-                $message = "<li class=\"list-group-item list-group-item-danger\">Access denied</li>";
+                $message = "<div class=\"alert alert-danger\" role=\"alert\">Access denied</div>";
+                $last_username = $username;
 
             } else {
                 $_SESSION["uid"] = $result["uid"];
@@ -45,7 +48,7 @@ if ($is_authed) {
             }
 
         } catch (PDOException $e) {
-            $message = "<li class=\"list-group-item list-group-item-danger\">We are unable to process your request. Please try again later.</li>";
+            $message = "<div class=\"alert alert-danger\" role=\"alert\">We are unable to process your request. Please try again later.</div>";
         }
 
     }
@@ -76,7 +79,7 @@ if ($success && $redirect != false) {
         <!-- Page Header -->
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Authentication</h1>
+                <h1 class="page-header"></h1>
             </div>
         </div>
         <!-- /.row -->
@@ -90,18 +93,15 @@ if ($success && $redirect != false) {
                         <h3 class="panel-title"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</h3>
                     </div>
                     <div class="panel-body">
-                        <ul class="list-group">
 <?php if ($success): ?>
-                            <li class="list-group-item">You are logged in as <b><?=$username?></b>. <a href="logout.php?redirect=main">Logout</a></li>
-                        </ul>
+                        <div class="alert alert-success" role="alert">You are logged in as <b><?=$username?></b>. <a href="logout.php?redirect=main">Logout</a></div>
 <?php else: ?>
-                            <?=$message?>
+                        <?=$message?>
 
-                        </ul>
                         <form method="POST">
                             <div class="form-group">
                                 <label for="username">Username/Email:</label>
-                                <input type="text" class="form-control" id="username" name="username" value="<?=$username?>" maxlength="255" />
+                                <input type="text" class="form-control" id="username" name="username" value="<?=$last_username?>" maxlength="255" />
                             </div>
                             <div class="form-group">
                                 <label for="password">Password:</label>
