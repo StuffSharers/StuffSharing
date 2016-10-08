@@ -12,31 +12,31 @@ $email = isset($_POST["email"]) ? $_POST["email"] : "";
 $contact = isset($_POST["contact"]) ? $_POST["contact"] : "";
 
 if (!isset($_POST["register_token"])) {
-    $message = "Please fill in your details.";
+    $message = "<li class=\"list-group-item list-group-item-info\">Please fill in your details</li>";
 
 } elseif ($_POST["register_token"] != $_SESSION["register_token"]) {
-    $message = "Invalid form submission";
+    $message = "<li class=\"list-group-item list-group-item-danger\">Invalid form submission</li>";
 
 } else {
-    $message = "<ul>";
+    $message = "";
 
     if (strlen($username) > 20 || strlen($username) < 4 || !ctype_alnum($username)) {
-        $message .= "<li>Invalid username: must be 4-20 alphanumeric characters</li>";
+        $message .= "<li class=\"list-group-item list-group-item-danger\">Invalid username: must be 4-20 alphanumeric characters</li>";
         $username = NULL;
     }
 
     if ((strlen($password) > 20 || strlen($password) < 4)) {
-        $message .= "<li>Invalid password: must be 4-20 characters</li>";
+        $message .= "<li class=\"list-group-item list-group-item-danger\">Invalid password: must be 4-20 characters</li>";
         $password = NULL;
     }
 
     if (empty($email) || strlen($email) > 255 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $message .= "<li>Invalid email</li>";
+        $message .= "<li class=\"list-group-item list-group-item-danger\">Invalid email</li>";
         $email = NULL;
     }
 
     if (!empty($contact) && (strlen($contact) != 8 || !ctype_digit($contact))) {
-        $message .= "<li>Invalid contact number: must be 8 digits\n</li>";
+        $message .= "<li class=\"list-group-item list-group-item-danger\">Invalid contact number: must be 8 digits\n</li>";
         $contact = NULL;
     }
 
@@ -100,17 +100,17 @@ $_SESSION['register_token'] = $register_token;
             <div class="col-lg-offset-4 col-lg-4 col-md-offset-3 col-md-6 col-sm-offset-2 col-sm-8">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-sign-in" aria-hidden="true"></i> Register</h3>
+                        <h3 class="panel-title"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</h3>
                     </div>
                     <div class="panel-body">
-                        <div class="well well-sm">
+                        <ul class="list-group">
 <?php if ($success): ?>
-                            Success!
-                        </div>
+                            <li class="list-group-item list-group-item-success">Success!</li>
+                        </ul>
 <?php else: ?>
                             <?=$message?>
+                        </ul>
 
-                        </div>
                         <form method="POST">
                             <div class="form-group">
                                 <label for="username">Username*</label>
