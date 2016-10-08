@@ -6,7 +6,7 @@ $is_authed = false;
 
 if (isset($_SESSION["uid"])) {
     try {
-        $stmt = $db->prepare("SELECT username, email, contact, join_date, is_admin FROM ss_user WHERE uid = :uid;");
+        $stmt = $db->prepare("SELECT username, is_admin FROM ss_user WHERE uid = :uid;");
 
         $stmt->bindParam(':uid', $_SESSION["uid"], PDO::PARAM_INT);
 
@@ -18,14 +18,11 @@ if (isset($_SESSION["uid"])) {
         }
 
         $username = $result["username"];
-        $email = $result["email"];
-        $contact = $result["contact"];
-        $join_date = $result["join_date"];
         $is_admin = $result["is_admin"];
         $is_authed = true;
 
     } catch (PDOException $e) {
-    	die("We are unable to process your request. Please try again later.");
+        die("We are unable to process your request. Please try again later.");
 
     } catch (Exception $e) {
         session_unset();

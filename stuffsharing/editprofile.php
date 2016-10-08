@@ -7,9 +7,7 @@ if (!$is_authed) {
     die();
 }
 
-// try {
-//     $db
-// }
+get_profile();
 
 ?>
 <!DOCTYPE html>
