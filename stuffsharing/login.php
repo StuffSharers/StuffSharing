@@ -77,31 +77,68 @@ $login_token = md5(uniqid('auth', true));
 $_SESSION['login_token'] = $login_token;
 
 ?>
-<html>
-<head>
-    <title>Login</title>
-</head>
+<!DOCTYPE html>
+<html lang="en">
+
+<?php include("partials/head.html") ?>
+
 <body>
+
+<?php include("partials/navigation.php") ?>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <!-- Page Header -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Authentication required</h1>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Main Row -->
+        <div class="row">
+
+            <div class="col-lg-offset-4 col-lg-4 col-md-offset-3 col-md-6 col-sm-offset-2 col-sm-8">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="well well-sm">
 <?php if ($success): ?>
-    <p>Success! You are logged in as <b><?=$username?></b>. <a href="logout.php">Logout</a></p>
+                            You are already logged in as <b><?=$username?></b>. <a href="logout.php?redirect=main">Logout</a>
 <?php else: ?>
-    <p><?=$message?></p>
-    <form method="POST">
-        <fieldset>
-            <p>
-                <label for="username">Username/Email</label>
-                <input type="text" name="username" value="<?=$username?>" maxlength="255" />
-            </p>
-            <p>
-                <label for="password">Password</label>
-                <input type="password" name="password" value="" maxlength="20" />
-            </p>
-            <p>
-                <input type="hidden" name="login_token" value="<?=$login_token?>" />
-                <input type="submit" value="Login" />
-            </p>
-        </fieldset>
-    </form>
+                            <?=$message?>
+                        </div>
+                        <form method="POST">
+                            <div class="form-group">
+                                <label for="username">Username/Email</label>
+                                <input type="text" class="form-control" id="username" name="username" value="<?=$username?>" maxlength="255" />
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" value="" maxlength="20" />
+                            </div>
+                            <!-- <div class="form-group"> -->
+                                <input type="hidden" name="login_token" value="<?=$login_token?>" />
+                                <button type="submit" class="btn btn-default pull-right">Login</button>
+                            <!-- </div> -->
+                        </form>
+                    </div>
 <?php endif ?>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+<?php include("partials/footer.html") ?>
+
+    </div>
+    <!-- /.container -->
+
 </body>
+
 </html>
