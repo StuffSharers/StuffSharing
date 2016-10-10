@@ -21,7 +21,7 @@ if ($is_authed) {
     } elseif ($_POST["login_token"] != $_SESSION["login_token"]) {
         $message = gen_alert("danger", "Invalid form submission");
 
-    } elseif (empty($username) || strlen($username) > 255 || strlen($password) > 20 || strlen($password) < 4) {
+    } elseif (!is_valid_username_email($username) || !is_valid_password($password)) {
         $message = gen_alert("danger", "Access denied");
 
     } else {

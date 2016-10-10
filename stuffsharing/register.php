@@ -25,26 +25,26 @@ if (!$is_authed) {
     } else {
         $message = "";
 
-        if (strlen($username) > 20 || strlen($username) < 4 || !ctype_alnum($username)) {
+        if (!is_valid_username($username)) {
             $message .= gen_alert("danger", "Invalid username: must be 4-20 alphanumeric characters");
             $username = NULL;
         } else {
             $last_username = $username;
         }
 
-        if ((strlen($password) > 20 || strlen($password) < 4)) {
+        if (!is_valid_password($password)) {
             $message .= gen_alert("danger", "Invalid password: must be 4-20 characters");
             $password = NULL;
         }
 
-        if (empty($email) || strlen($email) > 255 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (!is_valid_email($email)) {
             $message .= gen_alert("danger", "Invalid email");
             $email = NULL;
         } else {
             $last_email = $email;
         }
 
-        if (!empty($contact) && (strlen($contact) != 8 || !ctype_digit($contact))) {
+        if (!empty($contact) && !is_valid_contact($contact)) {
             $message .= gen_alert("danger", "Invalid contact number: must be 8 digits\n");
             $contact = NULL;
         } else {

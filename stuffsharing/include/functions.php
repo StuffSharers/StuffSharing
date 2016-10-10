@@ -34,6 +34,26 @@ function gen_alert($class, $message) {
     return "<div class=\"alert alert-${class}\" role=\"alert\">${message}</div>";
 }
 
+function is_valid_username($username) {
+    return strlen($username) >= 4 && strlen($username) <= 20 && ctype_alnum($username);
+}
+
+function is_valid_password($password) {
+    return strlen($password) >= 4 && strlen($password) <= 20;
+}
+
+function is_valid_email($email) {
+    return strlen($email) > 0 && strlen($email) <= 255 && filter_var($email, FILTER_VALIDATE_EMAIL);
+}
+
+function is_valid_username_email($username_email) {
+    return is_valid_username($username_email) || is_valid_email($username_email);
+}
+
+function is_valid_contact($contact) {
+    return strlen($contact) == 8 && ctype_digit($contact);
+}
+
 function get_profile() {
     if (!isset($_SESSION["uid"])) {
         return;
