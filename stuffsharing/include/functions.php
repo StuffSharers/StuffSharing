@@ -61,12 +61,13 @@ function get_profile() {
 
     global $db;
 
+    global $username;
     global $email;
     global $contact;
     global $join_date;
 
     try {
-        $stmt = $db->prepare("SELECT email, contact, join_date FROM ss_user WHERE uid = :uid;");
+        $stmt = $db->prepare("SELECT username, email, contact, join_date FROM ss_user WHERE uid = :uid;");
 
         $stmt->bindParam(':uid', $_SESSION["uid"], PDO::PARAM_INT);
 
@@ -77,6 +78,7 @@ function get_profile() {
             throw new Exception("Unknown uid in session");
         }
 
+        $username = $result["username"];
         $email = $result["email"];
         $contact = $result["contact"];
         $join_date = $result["join_date"];
