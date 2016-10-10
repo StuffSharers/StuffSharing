@@ -24,34 +24,35 @@ if (!$is_authed) {
 
     } else {
         $message = "";
+        $is_valid_submission = true;
 
         if (!is_valid_username($username)) {
             $message .= gen_alert("danger", "Invalid username: must be 4-20 alphanumeric characters");
-            $username = NULL;
+            $is_valid_submission = false;
         } else {
             $last_username = $username;
         }
 
         if (!is_valid_password($password)) {
             $message .= gen_alert("danger", "Invalid password: must be 4-20 characters");
-            $password = NULL;
+            $is_valid_submission = false;
         }
 
         if (!is_valid_email($email)) {
             $message .= gen_alert("danger", "Invalid email");
-            $email = NULL;
+            $is_valid_submission = false;
         } else {
             $last_email = $email;
         }
 
         if (!empty($contact) && !is_valid_contact($contact)) {
             $message .= gen_alert("danger", "Invalid contact number: must be 8 digits\n");
-            $contact = NULL;
+            $is_valid_submission = false;
         } else {
             $last_contact = $contact;
         }
 
-        if (!is_null($username) && !is_null($password) && !is_null($email) && !is_null($contact)) {
+        if ($is_valid_submission) {
             $password = sha1($password);
             $contact = empty($contact) ? NULL : $contact;
 
