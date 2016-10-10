@@ -30,6 +30,10 @@ function setup_redirect() {
     }
 }
 
+function gen_alert($class, $message) {
+    return "<div class=\"alert alert-${class}\" role=\"alert\">${message}</div>";
+}
+
 function get_profile() {
     if (!isset($_SESSION["uid"])) {
         return;

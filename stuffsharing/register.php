@@ -20,32 +20,32 @@ if (!$is_authed) {
         $message = "";
 
     } elseif ($_POST["register_token"] != $_SESSION["register_token"]) {
-        $message = "<div class=\"alert alert-danger\" role=\"alert\">Invalid form submission</div>";
+        $message = gen_alert("danger", "Invalid form submission");
 
     } else {
         $message = "";
 
         if (strlen($username) > 20 || strlen($username) < 4 || !ctype_alnum($username)) {
-            $message .= "<div class=\"alert alert-danger\" role=\"alert\">Invalid username: must be 4-20 alphanumeric characters</div>";
+            $message .= gen_alert("danger", "Invalid username: must be 4-20 alphanumeric characters");
             $username = NULL;
         } else {
             $last_username = $username;
         }
 
         if ((strlen($password) > 20 || strlen($password) < 4)) {
-            $message .= "<div class=\"alert alert-danger\" role=\"alert\">Invalid password: must be 4-20 characters</div>";
+            $message .= gen_alert("danger", "Invalid password: must be 4-20 characters");
             $password = NULL;
         }
 
         if (empty($email) || strlen($email) > 255 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $message .= "<div class=\"alert alert-danger\" role=\"alert\">Invalid email</div>";
+            $message .= gen_alert("danger", "Invalid email");
             $email = NULL;
         } else {
             $last_email = $email;
         }
 
         if (!empty($contact) && (strlen($contact) != 8 || !ctype_digit($contact))) {
-            $message .= "<div class=\"alert alert-danger\" role=\"alert\">Invalid contact number: must be 8 digits\n</div>";
+            $message .= gen_alert("danger", "Invalid contact number: must be 8 digits\n");
             $contact = NULL;
         } else {
             $last_contact = $contact;
@@ -70,9 +70,9 @@ if (!$is_authed) {
 
             } catch (PDOException $e) {
                 if ($e->getCode() == 23505) {
-                    $message = "<div class=\"alert alert-danger\" role=\"alert\">Username or email already exists</div>";
+                    $message = gen_alert("danger", "Username or email already exists");
                 } else {
-                    $message = "<div class=\"alert alert-danger\" role=\"alert\">We are unable to process your request. Please try again later.</div>";
+                    $message = gen_alert("danger", "We are unable to process your request. Please try again later.");
                 }
             }
         }

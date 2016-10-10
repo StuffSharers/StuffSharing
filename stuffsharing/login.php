@@ -19,10 +19,10 @@ if ($is_authed) {
         $message = "";
 
     } elseif ($_POST["login_token"] != $_SESSION["login_token"]) {
-        $message = "<div class=\"alert alert-danger\" role=\"alert\">Invalid form submission</div>";
+        $message = gen_alert("danger", "Invalid form submission");
 
     } elseif (empty($username) || strlen($username) > 255 || strlen($password) > 20 || strlen($password) < 4) {
-        $message = "<div class=\"alert alert-danger\" role=\"alert\">Access denied</div>";
+        $message = gen_alert("danger", "Access denied");
 
     } else {
         $password = sha1($password);
@@ -38,7 +38,7 @@ if ($is_authed) {
             $result = $stmt->fetch();
 
             if ($result == false) {
-                $message = "<div class=\"alert alert-danger\" role=\"alert\">Access denied</div>";
+                $message = gen_alert("danger", "Access denied");
                 $last_username = $username;
 
             } else {
@@ -48,7 +48,7 @@ if ($is_authed) {
             }
 
         } catch (PDOException $e) {
-            $message = "<div class=\"alert alert-danger\" role=\"alert\">We are unable to process your request. Please try again later.</div>";
+            $message = gen_alert("danger", "We are unable to process your request. Please try again later.");
         }
 
     }

@@ -13,10 +13,10 @@ if (!isset($_POST["delete_token"])) {
     $message = "";
 
 } elseif ($_POST["delete_token"] != $_SESSION["delete_token"]) {
-    $message = "<div class=\"alert alert-danger\" role=\"alert\">Invalid form submission</div>";
+    $message = gen_alert("danger", "Invalid form submission");
 
 } elseif ($_POST["confirm_delete"] != "Please delete my account!") {
-    $message = "<div class=\"alert alert-danger\" role=\"alert\">If you really wish to delete your account, please follow the instructions <em>exactly</em></div>";
+    $message = gen_alert("danger", "If you really wish to delete your account, please follow the instructions <em>exactly</em>");
 
 } else {
     try {
@@ -30,7 +30,7 @@ if (!isset($_POST["delete_token"])) {
         $success = true;
 
     } catch (PDOException $e) {
-        $message = "<div class=\"alert alert-danger\" role=\"alert\">We are unable to process your request. Please try again later.</div>";
+        $message = gen_alert("danger", "We are unable to process your request. Please try again later.");
     }
 
 }
