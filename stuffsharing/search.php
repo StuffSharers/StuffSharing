@@ -22,13 +22,13 @@ require("include/functions.php");
 			echo "<div class=\"row\">";
 
 			/* Thumbnail of item start */
-			echo "<div class=\"col-xs-8 col-xs-offset-2 col-sm-6 col-md-4\">";
+			echo "<div class=\"col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-0 col-md-4 col-md-offset-0\">";
 			echo "<img src=\"http://placehold.it/700x400\" class=\"img-thumbnail\"/>";
 			echo "</div>";
 			/* Thumbnail of item end */
 
 			/* Name, Description, and Pickup+Return info start */
-			echo "<div class=\"col-xs-8 col-xs-offset-2 col-sm-6 col-md-8\">";
+			echo "<div class=\"col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-0 col-md-8 col-md-offset-0\">";
 			echo "<h4>".$result["name"]."</h4>";
 			echo "<p>".$result["description"]."</p>";
 
