@@ -42,24 +42,68 @@
 		<div class="container">
 		
 			<div class="row text-center">
-				<h1>Create Advertisements Here!</h1>
+				<h1>Advertise your Items!</h1>
 			</div>
 			
 			<hr>
 			
-			<div class="row form-group">
-			  <label for="item-name-input-form" class="col-xs-2 col-form-label">Item Name</label>
-			  <div class="col-xs-10">
-				<input class="form-control" type="text" value="Item Name Here" id="item-name-input-form">
-			  </div>
-			</div>
+			<form>
 			
-			<div class="row form-group">
-			  <label for="item-description-input-text-area" class="col-xs-2 col-form-label">Item Description</label>
-			  <div class="col-xs-10">
-				<textarea class="textarea-limit-width form-control" type="text" rows="3" id="item-description-input-text-area"> </textarea>
-			  </div>
-			</div>
+				<div class="row form-group">
+					<label for="item-name-input-form" class="col-xs-2 col-form-label">Item Name</label>
+					<div class="col-xs-10">
+						<input class="form-control" type="text" placeholder="Item Name Here" id="item-name-input-form">
+					</div>
+				</div>
+				
+				<div class="row form-group">
+					<label for="item-description-input-text-area" class="col-xs-2 col-form-label">Item Description</label>
+					<div class="col-xs-10">
+						<textarea class="textarea-limit-width form-control" type="text" rows="3" id="item-description-input-text-area" maxlength="512" placeholder="Item Description Here"> </textarea>
+					</div>
+				</div>
+				
+				<div class="row form-group">
+					<label for="price-input-form" class="col-xs-2 col-form-label">Price</label>
+					<div class="col-xs-10">
+						<input class="form-control" type="text" placeholder="Price" id="price-input-form">
+					</div>
+				</div>
+				
+				<div class="row form-group">
+					<label for="pickup-date-input" class="col-xs-2 col-form-label">Pickup Date</label>
+					<div class="col-xs-10">
+						<div class='date input-group' id='pickup-date-input'>
+							<input type='text' class="form-control" id='pickup-date-input' name='pickup-date' data-date-format="DD-MM-YYYY hh:mm A" />
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</span>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row form-group">
+					<label for="return-date-input" class="col-xs-2 col-form-label">Return Date</label>
+					<div class="col-xs-10">
+						<div class='date input-group' id='return-date-input'>
+							<input type='text' class="form-control" id='return-date-input' name='return-date' data-date-format="DD-MM-YYYY hh:mm A" />
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</span>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-xs-12">
+						<button type="submit" class="btn btn-primary col-xs-4 col-xs-offset-1">Advertise!</button>
+						<button type="cancel" class="btn btn-secondary col-xs-4 col-xs-offset-2">Cancel</button>
+					</div>
+				</div>	
+				
+			</form>
+			
+
 			
 			<?php
 				include("partials/footer.html");
