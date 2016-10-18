@@ -59,7 +59,7 @@
 				<div class="row form-group">
 					<label for="item-description-input-text-area" class="col-xs-2 col-form-label">Item Description</label>
 					<div class="col-xs-10">
-						<textarea class="textarea-limit-width form-control" type="text" rows="3" id="item-description-input-text-area" maxlength="512" placeholder="Item Description Here"> </textarea>
+						<textarea class="textarea-limit-width form-control" type="text" placeholder="Item Description Here" id="item-description-input-text-area" rows="3" maxlength="512"> </textarea>
 					</div>
 				</div>
 				
@@ -70,11 +70,15 @@
 					</div>
 				</div>
 				
+				<?php
+					$datetime = date('Y-m-d', time()).'T'.date('H:i:s', time());
+				?>				
+				
 				<div class="row form-group">
 					<label for="pickup-date-input" class="col-xs-2 col-form-label">Pickup Date</label>
 					<div class="col-xs-10">
 						<div class='date input-group' id='pickup-date-input'>
-							<input type='text' class="form-control" id='pickup-date-input' name='pickup-date' data-date-format="DD-MM-YYYY hh:mm A" />
+							<input class="form-control" type='datetime-local' id='pickup-date-input' name='pickup-date' value="<?php echo htmlspecialchars($datetime); ?>"/>
 							<span class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</span>
@@ -86,7 +90,7 @@
 					<label for="return-date-input" class="col-xs-2 col-form-label">Return Date</label>
 					<div class="col-xs-10">
 						<div class='date input-group' id='return-date-input'>
-							<input type='text' class="form-control" id='return-date-input' name='return-date' data-date-format="DD-MM-YYYY hh:mm A" />
+							<input class="form-control" type='datetime-local' id='return-date-input' name='return-date' value="<?php echo htmlspecialchars($datetime); ?>"/>
 							<span class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</span>
