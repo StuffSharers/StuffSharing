@@ -35,8 +35,14 @@ require("include/functions.php");
 			/* Pickup and Return info start */
 			echo "<div class \"row\">";
 
+			echo "<div class=\"col-xs-4 col-sm-4 col-md-4\">";
+			echo "<dl><dt>Owner:</dt>";
+			echo "<dd><i class=\"fa fa-fw fa-user\" aria-hidden=\"true\"></i><a href=\"user.php?id=\"".$result["owner_id"].">"
+					.$result["owner_name"]."</a></dd>";
+			echo "</dl></div>";
+
 			/* Pickup info start */
-			echo "<div class=\"col-xs-6 col-sm-6 col-md-6\">";
+			echo "<div class=\"col-xs-4 col-sm-4 col-md-4\">";
 			echo "<dl><dt>Pickup:</dt>";
 			echo "<dd><i class=\"fa fa-fw fa-calendar-check-o\" aria-hidden=\"true\"></i>".date("D, d M Y", strtotime($result["pickup_date"]))."</dd>";
 			echo "<dd><i class=\"fa fa-fw fa-map-marker\" aria-hidden=\"true\"></i>".$result["pickup_locn"]."</dd>";
@@ -44,7 +50,7 @@ require("include/functions.php");
 			/* Pickup info end */
 
 			/* Return info start */
-			echo "<div class=\"col-xs-6 col-sm-6 col-md-6\">";
+			echo "<div class=\"col-xs-4 col-sm-4 col-md-4\">";
 			echo "<dl><dt>Return:</dt>";
 			echo "<dd><i class=\"fa fa-fw fa-calendar-check-o\" aria-hidden=\"true\"></i>".date("D, d M Y", strtotime($result["return_date"]))."</dd>";
 			echo "<dd><i class=\"fa fa-fw fa-map-marker\" aria-hidden=\"true\"></i>".$result["return_locn"]."</dd>";
@@ -95,10 +101,10 @@ require("include/functions.php");
                     global $db;
                     $query = $_GET['query'];
                     $str_array = explode(" ", $query);
-                    $statement = "SELECT name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE is_available = true";
+                    $statement = "SELECT u.username AS owner_name, u.uid AS owner_id, s.name AS name, s.description AS description, s.pickup_date AS pickup_date, s.pickup_locn AS pickup_locn, s.return_date AS return_date, s.return_locn AS return_locn FROM ss_stuff s, ss_user u  WHERE s.is_available = true AND s.uid = u.uid";
                     foreach ($str_array as $word) {
                         $word = strtolower($word);
-                        $statement = $statement . " AND ((LOWER(name) LIKE '%" . $word . "%') OR (LOWER(description) LIKE '%" . $word . "%') OR (LOWER(pickup_locn) LIKE '%" . $word . "%') OR (LOWER(return_locn) LIKE '%" . $word . "%'))";
+                        $statement = $statement . " AND ((LOWER(s.name) LIKE '%" . $word . "%') OR (LOWER(s.description) LIKE '%" . $word . "%') OR (LOWER(s.pickup_locn) LIKE '%" . $word . "%') OR (LOWER(s.return_locn) LIKE '%" . $word . "%'))";
                     }
                     $statement = $statement . ";";
                     $results = $db->query($statement);
