@@ -3,8 +3,12 @@
 	require("include/functions.php");
 ?>
 
+<?php if (!$is_authed): header('Location: login.php');?>
+	
+<?php else: ?>
+
 <!DOCTYPE html>
-<html lang="en">
+	<html lang="en">
 	
 	<head>
 		<title>StuffSharing | a place to share stuff</title>
@@ -107,8 +111,6 @@
 				
 			</form>
 			
-
-			
 			<?php
 				include("partials/footer.html");
 			?>
@@ -118,4 +120,5 @@
 	</body>
 	
 </html>
-	
+
+<?php endif ?>
