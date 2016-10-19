@@ -11,13 +11,16 @@
 		$stuffname = $stuffdesc = $stuffprice = $pickupdate = $pickuploc = $returndate = $returnloc = "";
 		
 		if ($_POST) {
+			
+			$curruid = $_SESSION["uid"];
+			get_profile();
 		
 			$stuffname = neutralize_input($_POST["stuff-name"]);
 			$stuffdesc = neutralize_input($_POST["stuff-desc"]);
 			$stuffprice = neutralize_input($_POST["stuff-price"]);
-			$pickupdate = neutralize_input($_POST["pickup-date"]);
+			$pickupdate = $_POST["pickup-date"];
 			$pickuploc = neutralize_input($_POST["pickup-location"]);
-			$returndate = neutralize_input($_POST["return-date"]);
+			$returndate = $_POST["return-date"];
 			$returnloc = neutralize_input($_POST["return-location"]);
 			
 		} else {	
@@ -27,6 +30,8 @@
 		
 		if ($success) {
 			echo("success.php");
+		} else {
+			
 		}
 	}
 ?>
@@ -102,15 +107,19 @@
 					</div>
 				</div>
 				
-				<?php
-					$datetime = gen_datetime_local();
-				?>				
+				<?php				
+					$nowdatetimeobj = new DateTime('NOW');
+					$tomorrowdatetimeobj = new DateTime('TOMORROW');
+					
+					$nowdatetime = $nowdatetimeobj->format('Y-m-d'). 'T' .$nowdatetimeobj->format('H:i');
+					$tomorrowdatetime = $tomorrowdatetimeobj->format('Y-m-d'). 'T' .$tomorrowdatetimeobj->format('H:i');
+				?>
 				
 				<div class="row form-group">
 					<label for="pickup-date-input" class="col-xs-2 col-form-label">Pickup Date: *</label>
 					<div class="col-xs-10">
 						<div class='date input-group' id='pickup-date-input'>
-							<input class="form-control" type='datetime-local' id='pickup-date-input' name='pickup-date' value="<?php echo htmlspecialchars($datetime); ?>" required="required"/>
+							<input class="form-control" type='datetime-local' id='pickup-date-input' name='pickup-date' value="<?php echo htmlspecialchars($nowdatetime); ?>" required="required"/>
 							<span class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</span>
@@ -129,7 +138,7 @@
 					<label for="return-date-input" class="col-xs-2 col-form-label">Return Date: *</label>
 					<div class="col-xs-10">
 						<div class='date input-group' id='return-date-input'>
-							<input class="form-control" type='datetime-local' id='return-date-input' name='return-date' value="<?php echo htmlspecialchars($datetime); ?>" required="required"/>
+							<input class="form-control" type='datetime-local' id='return-date-input' name='return-date' value="<?php echo htmlspecialchars($tomorrowdatetime); ?>" required="required"/>
 							<span class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</span>
