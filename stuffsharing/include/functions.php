@@ -21,7 +21,11 @@ function setup_redirect() {
             case "deleteprofile":
             $redirect = "./deleteprofile.php";
             break;
-
+			
+			case "advertise":
+			$redirect = "./advertise.php";
+			break;
+			
             default:
             $redirect = false;
         }
@@ -32,6 +36,18 @@ function setup_redirect() {
 
 function gen_alert($class, $message) {
     return "<div class=\"alert alert-${class}\" role=\"alert\">${message}</div>";
+}
+
+function gen_datetime_local() {
+	return date('Y-m-d', time()).'T'.date('H:i:s', time());
+}
+
+function neutralize_input($data) {
+	//Taken from http://www.w3schools.com/php/php_form_validation.asp
+	$data = trim($data);
+	$data = stripslashes($data);
+	$data = htmlspecialchars($data);
+	return $data;
 }
 
 function is_valid_username($username) {
