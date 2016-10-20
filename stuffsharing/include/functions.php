@@ -87,7 +87,7 @@ function is_valid_return_location($return_location) {
 }
 
 function is_valid_pickup_and_return_date($pickup_date, $return_date) {
-	return true;
+	return $pickup_date < $return_date;
 }
 
 function get_profile() {

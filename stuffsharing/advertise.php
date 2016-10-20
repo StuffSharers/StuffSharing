@@ -1,19 +1,25 @@
 <?php 
 	require("include/auth.php");
 	require("include/functions.php");
+	
+	$message = "";
 ?>
 
 <?php 
 	function has_posted(){
 		
-		$success = true;
+		$success = false;
 		
 		$stuffname = $stuffdesc = $stuffprice = $pickupdate = $pickuploc = $returndate = $returnloc = "";
 		
 		if ($_POST) {
 			
-			$curruid = $_SESSION["uid"];
-			get_profile();
+			$success = true;
+			
+			global $message;
+			$message = "";
+			
+			//All Form Inputs filled in due to required field.
 		
 			$stuffname = neutralize_input($_POST["stuff-name"]);
 			$stuffdesc = neutralize_input($_POST["stuff-desc"]);
@@ -23,13 +29,45 @@
 			$returndate = $_POST["return-date"];
 			$returnloc = neutralize_input($_POST["return-location"]);
 			
+			if (!is_valid_stuffname($stuffname)) {
+				$message .= gen_alert('danger', "Invalid Stuff Name: Must be 1 - 255 alphanumeric characters");
+				$success = false;
+			} 
+			
+			if (!is_valid_price($stuffprice)) {
+				$message .= gen_alert('danger', "Invalid Stuff Price: Must be a valid numeric value");
+				$success = false;
+			} 
+			
+			if (!is_valid_pickup_location($pickuploc)) {
+				$message .= gen_alert('danger', "Invalid Pickup Location: Must be 1 - 255 alphanumeric characters");
+				$success = false;
+			}
+			
+			if (!is_valid_return_location($returnloc)) {
+				$message .= gen_alert('danger', "Invalid Return Location: Must be 1 - 255 alphanumeric characters");
+				$success = false;				
+			}
+			
+			if (!is_valid_pickup_and_return_date($pickupdate, $returndate)) {
+				$message .= gen_alert('danger', "Invalid Pickup and Return Dates: Pickup Date must be earlier than Return Date \n");
+				$success = false;
+			}
+			
 		} else {	
 			//Nothing Posted
 			$success = false;
 		}
 		
 		if ($success) {
-			echo("success.php");
+			// Insert into Database
+
+			$curruid = $_SESSION["uid"];
+			get_profile();
+			
+			$availability = true;
+			
+			
 		} else {
 			
 		}
@@ -84,7 +122,12 @@
 			
 			<hr>
 			
-			<form action="<?php has_posted(); ?>" method="post">
+			<?php 
+				has_posted();
+				echo($message); 
+			?>
+			
+			<form method="post">
 			
 				<div class="row form-group">
 					<label for="stuff-name-input-form" class="col-xs-2 col-form-label">Stuff Name: *</label>
@@ -103,7 +146,7 @@
 				<div class="row form-group">
 					<label for="price-input-form" class="col-xs-2 col-form-label">Price: </label>
 					<div class="col-xs-10">
-						<input class="form-control" type="text" placeholder="Price" id="price-input-form" name="stuff-price">
+						<input class="form-control" type="text" value="0.00" id="price-input-form" name="stuff-price">
 					</div>
 				</div>
 				
