@@ -27,19 +27,21 @@ require("include/functions.php");
 			echo "</div>";
 			/* Thumbnail of item end */
 
-			/* Name, Description, and Pickup+Return info start */
+			/* Name, Description, and Owner+Pickup+Return info start */
 			echo "<div class=\"col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-0 col-md-8 col-md-offset-0\">";
 			echo "<h4>".$result["name"]."</h4>";
 			echo "<p>".$result["description"]."</p>";
 
-			/* Pickup and Return info start */
+			/* Owner, Pickup and Return info start */
 			echo "<div class \"row\">";
 
+			/* Owner info start */
 			echo "<div class=\"col-xs-4 col-sm-4 col-md-4\">";
 			echo "<dl><dt>Owner:</dt>";
 			echo "<dd><i class=\"fa fa-fw fa-user\" aria-hidden=\"true\"></i><a href=\"user.php?id=\"".$result["owner_id"].">"
 					.$result["owner_name"]."</a></dd>";
 			echo "</dl></div>";
+			/* Owner info end */
 
 			/* Pickup info start */
 			echo "<div class=\"col-xs-4 col-sm-4 col-md-4\">";
@@ -58,10 +60,10 @@ require("include/functions.php");
 			/* Return info end */
 
 			echo "</div>";
-			/* Pickup and Return info end */
+			/* Owner, Pickup and Return info end */
 
 			echo "</div>";
-			/* Name, Description and Pickup+Return info end */
+			/* Name, Description and Owner+Pickup+Return info end */
 
 			echo "</div>";
 			/* Search result row end */
@@ -101,7 +103,7 @@ require("include/functions.php");
                     global $db;
                     $query = $_GET['query'];
                     $str_array = explode(" ", $query);
-                    $statement = "SELECT u.username AS owner_name, u.uid AS owner_id, s.name AS name, s.description AS description, s.pickup_date AS pickup_date, s.pickup_locn AS pickup_locn, s.return_date AS return_date, s.return_locn AS return_locn FROM ss_stuff s, ss_user u  WHERE s.is_available = true AND s.uid = u.uid";
+                    $statement = "SELECT u.username AS owner_name, u.uid AS owner_id, s.name AS name, s.description AS description, s.pickup_date AS pickup_date, s.pickup_locn AS pickup_locn, s.return_date AS return_date, s.return_locn AS return_locn FROM available_stuff s, ss_user u  WHERE s.is_available = true AND s.uid = u.uid";
                     foreach ($str_array as $word) {
                         $word = strtolower($word);
                         $statement = $statement . " AND ((LOWER(s.name) LIKE '%" . $word . "%') OR (LOWER(s.description) LIKE '%" . $word . "%') OR (LOWER(s.pickup_locn) LIKE '%" . $word . "%') OR (LOWER(s.return_locn) LIKE '%" . $word . "%'))";
