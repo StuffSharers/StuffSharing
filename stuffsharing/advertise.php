@@ -1,11 +1,12 @@
 <?php 
 	require("include/auth.php");
 	require("include/functions.php");
-	
-	$message = "";
 ?>
 
 <?php 
+	
+	$message = "";
+	
 	function has_posted(){
 		
 		$success = false;
@@ -19,14 +20,14 @@
 			global $message;
 			$message = "";
 			
-			//All Form Inputs filled in due to required field.
+			//All neccessary Form Inputs filled in due to required field.
 		
 			$stuffname = neutralize_input($_POST["stuff-name"]);
 			$stuffdesc = neutralize_input($_POST["stuff-desc"]);
 			$stuffprice = neutralize_input($_POST["stuff-price"]);
-			$pickupdate = $_POST["pickup-date"];
+			$pickupdate = gen_date_from_datetime_local_str($_POST["pickup-date"]);
 			$pickuploc = neutralize_input($_POST["pickup-location"]);
-			$returndate = $_POST["return-date"];
+			$returndate = gen_date_from_datetime_local_str($_POST["return-date"]);
 			$returnloc = neutralize_input($_POST["return-location"]);
 			
 			if (!is_valid_stuffname($stuffname)) {
@@ -61,16 +62,38 @@
 		
 		if ($success) {
 			// Insert into Database
+			// Adapted from: http://stackoverflow.com/questions/60174/how-can-i-prevent-sql-injection-in-php
 
 			$curruid = $_SESSION["uid"];
 			get_profile();
 			
 			$availability = true;
 			
+			try {
+				global $db;
+				
+				$stmt = $db->prepare('INSERT INTO ss_stuff(uid, name, description, is_available, pref_price, pickup_date, pickup_locn, return_date, return_locn) 
+									   VALUES (:curruid, :stuffname, :stuffdesc, :availability, :stuffprice, :pickupdate, :pickuploc, :returndate, :returnloc)');
+
+                $stmt->bindParam(':curruid', $curruid, PDO::PARAM_INT);
+                $stmt->bindParam(':stuffname', $stuffname, PDO::PARAM_STR, 256);
+                $stmt->bindParam(':stuffdesc', $stuffdesc, is_null($stuffdesc) ? PDO::PARAM_NULL : PDO::PARAM_STR);
+                $stmt->bindParam(':availability', $availability, PDO::PARAM_BOOL);
+				$stmt->bindParam(':stuffprice', $stuffprice, PDO::PARAM_STR);
+				$stmt->bindParam(':pickupdate', $pickupdate->format('Y-m-d H:i'), PDO::PARAM_STR);
+				$stmt->bindParam(':pickuploc', $pickuploc, PDO::PARAM_STR, 256);
+				$stmt->bindParam(':returndate', $returndate->format('Y-m-d H:i'), PDO::PARAM_STR);
+				$stmt->bindParam(':returnloc', $returnloc, PDO::PARAM_STR, 256);
+
+                $stmt->execute();
+
+                $success = true;
+
+            } catch (PDOException $e) {
+                $message = gen_alert("danger", "We are unable to process your request. Please try again later.");
+            }
 			
-		} else {
-			
-		}
+		} 
 	}
 ?>
 
