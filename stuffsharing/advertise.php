@@ -88,6 +88,8 @@
                 $stmt->execute();
 
                 $success = true;
+				
+				$message = gen_alert("success", "Stuff Advertised!");
 
             } catch (PDOException $e) {
                 $message = gen_alert("danger", "We are unable to process your request. Please try again later.");
