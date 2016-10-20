@@ -21,7 +21,11 @@ function setup_redirect() {
             case "deleteprofile":
             $redirect = "./deleteprofile.php";
             break;
-
+			
+			case "advertise":
+			$redirect = "./advertise.php";
+			break;
+			
             default:
             $redirect = false;
         }
@@ -32,6 +36,18 @@ function setup_redirect() {
 
 function gen_alert($class, $message) {
     return "<div class=\"alert alert-${class}\" role=\"alert\">${message}</div>";
+}
+
+function gen_date_from_datetime_local_str($datetime_local_str) {
+	return new DateTime($datetime_local_str);
+}
+
+function neutralize_input($data) {
+	//Taken from http://www.w3schools.com/php/php_form_validation.asp
+	$data = trim($data);
+	$data = stripslashes($data);
+	$data = htmlspecialchars($data);
+	return $data;
 }
 
 function is_valid_username($username) {
@@ -52,6 +68,26 @@ function is_valid_username_email($username_email) {
 
 function is_valid_contact($contact) {
     return strlen($contact) == 8 && ctype_digit($contact);
+}
+
+function is_valid_stuffname($stuffname) {
+	return strlen($stuffname) >= 1 && strlen($stuffname) <= 255;
+}
+
+function is_valid_price($price) {
+	return is_numeric($price);
+}
+
+function is_valid_pickup_location($pickup_location) {
+	return strlen($pickup_location) >= 1 && strlen($pickup_location) <= 255;
+}
+
+function is_valid_return_location($return_location) {
+	return strlen($return_location) >= 1 && strlen($return_location) <= 255;
+}
+
+function is_valid_pickup_and_return_date($pickup_date, $return_date) {
+	return true;
 }
 
 function get_profile() {
