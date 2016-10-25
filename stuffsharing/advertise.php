@@ -5,6 +5,14 @@
 
 <?php 
 	
+	$last_stuffname = "";
+	$last_stuffdesc = "";
+	$last_stuffprice = "0.00";
+	$last_pickupdate = NULL;
+	$last_pickuploc = "";
+	$last_returndate = NULL;
+	$last_returnloc = "";
+	
 	$message = "";
 	
 	function has_posted(){
@@ -18,6 +26,8 @@
 			$success = true;
 			
 			global $message;
+			global $last_stuffname, $last_stuffdesc, $last_stuffprice, $last_pickupdate, $last_pickuploc, $last_returndate, $last_returnloc;
+			
 			$message = "";
 			
 			//All neccessary Form Inputs filled in due to required field.
@@ -33,26 +43,39 @@
 			if (!is_valid_stuffname($stuffname)) {
 				$message .= gen_alert('danger', "Invalid Stuff Name: Must be 1 - 255 alphanumeric characters");
 				$success = false;
-			} 
+			} else {
+				$last_stuffname = $stuffname;
+			}
+			
+			$last_stuffdesc = $stuffdesc;
 			
 			if (!is_valid_price($stuffprice)) {
 				$message .= gen_alert('danger', "Invalid Stuff Price: Must be a valid numeric value");
 				$success = false;
-			} 
+			} else {
+				$last_stuffprice = $stuffprice;
+			}
 			
 			if (!is_valid_pickup_location($pickuploc)) {
 				$message .= gen_alert('danger', "Invalid Pickup Location: Must be 1 - 255 alphanumeric characters");
 				$success = false;
+			} else {
+				$last_pickuploc = $pickuploc;
 			}
 			
 			if (!is_valid_return_location($returnloc)) {
 				$message .= gen_alert('danger', "Invalid Return Location: Must be 1 - 255 alphanumeric characters");
 				$success = false;				
+			} else {
+				$last_returnloc = $returnloc;
 			}
 			
 			if (!is_valid_pickup_and_return_date($pickupdate, $returndate)) {
 				$message .= gen_alert('danger', "Invalid Pickup and Return Dates: Pickup Date must be earlier than Return Date \n");
 				$success = false;
+			} else {
+				$last_pickupdate = $pickupdate;
+				$last_returndate = $returndate;
 			}
 			
 		} else {	
@@ -157,37 +180,42 @@
 				<div class="row form-group">
 					<label for="stuff-name-input-form" class="col-xs-2 col-form-label">Stuff Name: *</label>
 					<div class="col-xs-10">
-						<input class="form-control" type="text" placeholder="Stuff Name Here" id="stuff-name-input-form" name="stuff-name" maxlength="255" required="required">
+						<input class="form-control" type="text" placeholder="Stuff Name Here" id="stuff-name-input-form" value="<?=$last_stuffname?>" name="stuff-name" maxlength="255" required="required">
 					</div>
 				</div>
 				
 				<div class="row form-group">
 					<label for="stuff-description-input-text-area" class="col-xs-2 col-form-label">Stuff Description: </label>
 					<div class="col-xs-10">
-						<textarea class="textarea-limit-width form-control" type="text" placeholder="Stuff Description Here" id="stuff-description-input-text-area" name="stuff-desc" rows="3" maxlength="1024"></textarea>
+						<textarea class="textarea-limit-width form-control" type="text" placeholder="Stuff Description Here" id="stuff-description-input-text-area" name="stuff-desc" rows="3" maxlength="1024"><?=$last_stuffdesc?></textarea>
 					</div>
 				</div>
 				
 				<div class="row form-group">
 					<label for="price-input-form" class="col-xs-2 col-form-label">Price: </label>
 					<div class="col-xs-10">
-						<input class="form-control" type="text" value="0.00" id="price-input-form" name="stuff-price">
+						<input class="form-control" type="text" id="price-input-form" value="<?=$last_stuffprice?>" name="stuff-price">
 					</div>
 				</div>
 				
-				<?php				
-					$nowdatetimeobj = new DateTime('NOW');
-					$tomorrowdatetimeobj = new DateTime('TOMORROW');
-					
-					$nowdatetime = $nowdatetimeobj->format('Y-m-d'). 'T' .$nowdatetimeobj->format('H:i');
-					$tomorrowdatetime = $tomorrowdatetimeobj->format('Y-m-d'). 'T' .$tomorrowdatetimeobj->format('H:i');
+				<?php
+					if (!is_null($last_pickupdate) and !is_null($last_returndate)) {
+						$pickupdatetimeobj = $last_pickupdate;
+						$returndatetimeobj = $last_returndate;
+					} else {
+						$pickupdatetimeobj = new DateTime('NOW');
+						$returndatetimeobj = new DateTime('TOMORROW');					
+					}
+
+					$pickupdatetime = $pickupdatetimeobj->format('Y-m-d\TH:i');
+					$returndatetime = $returndatetimeobj->format('Y-m-d\TH:i');
 				?>
 				
 				<div class="row form-group">
 					<label for="pickup-date-input" class="col-xs-2 col-form-label">Pickup Date: *</label>
 					<div class="col-xs-10">
 						<div class='date input-group' id='pickup-date-input'>
-							<input class="form-control" type='datetime-local' id='pickup-date-input' name='pickup-date' value="<?php echo htmlspecialchars($nowdatetime); ?>" required="required"/>
+							<input class="form-control" type='datetime-local' id='pickup-date-input' name='pickup-date' value="<?=htmlspecialchars($pickupdatetime) ?>" required="required"/>
 							<span class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</span>
@@ -198,7 +226,7 @@
 				<div class="row form-group">
 					<label for="pickup-location-input-form" class="col-xs-2 col-form-label">Pickup Location: *</label>
 					<div class="col-xs-10">
-						<input class="form-control" type="text" placeholder="Pickup Location Here" id="pickup-location-input-form" name="pickup-location" maxlength="255" required="required">
+						<input class="form-control" type="text" placeholder="Pickup Location Here" id="pickup-location-input-form" value="<?=$last_pickuploc?>" name="pickup-location" maxlength="255" required="required">
 					</div>
 				</div>				
 				
@@ -206,7 +234,7 @@
 					<label for="return-date-input" class="col-xs-2 col-form-label">Return Date: *</label>
 					<div class="col-xs-10">
 						<div class='date input-group' id='return-date-input'>
-							<input class="form-control" type='datetime-local' id='return-date-input' name='return-date' value="<?php echo htmlspecialchars($tomorrowdatetime); ?>" required="required"/>
+							<input class="form-control" type='datetime-local' id='return-date-input' name='return-date' value="<?=htmlspecialchars($returndatetime) ?>" required="required"/>
 							<span class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</span>
@@ -217,7 +245,7 @@
 				<div class="row form-group">
 					<label for="return-location-input-form" class="col-xs-2 col-form-label">Return Location: *</label>
 					<div class="col-xs-10">
-						<input class="form-control" type="text" placeholder="Return Location Here" id="return-location-input-form" name="return-location" maxlength="255" required="required">
+						<input class="form-control" type="text" placeholder="Return Location Here" id="return-location-input-form" value="<?=$last_returnloc?>" name="return-location" maxlength="255" required="required">
 					</div>
 				</div>
 				
