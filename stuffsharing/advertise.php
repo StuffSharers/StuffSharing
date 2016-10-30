@@ -136,101 +136,115 @@ if ($success) {
         <!-- Page Header -->
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Advertise your Stuff!</h1>
+                <h1 class="page-header"></h1>
             </div>
         </div>
         <!-- /.row -->
 
         <!-- Main Row -->
         <div class="row">
-            <div class="col-lg-12">
 
-                <?=$message?>
-
-                <form method="post">
-
-                    <div class="form-group">
-                        <label for="stuff-name-input-form">Name: *</label>
-                        <input class="form-control" type="text" placeholder="Name" id="stuff-name-input-form" value="<?=$last_stuffname?>" name="stuff-name" maxlength="255" required="required">
+            <div class="col-lg-offset-2 col-lg-8 col-md-offset-1 col-md-10">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-plus-circle" aria-hidden="true"></i> Advertise</h3>
                     </div>
+                    <div class="panel-body">
 
-                    <div class="form-group">
-                        <label for="stuff-description-input-text-area">Description:</label>
-                        <textarea class="form-control" type="text" placeholder="Description" id="stuff-description-input-text-area" name="stuff-desc" rows="3" maxlength="1024"><?=$last_stuffdesc?></textarea>
-                    </div>
+                        <?=$message?>
 
-                    <div class="form-group">
-                        <label for="price-input-form">Price: </label>
-                        <input class="form-control" type="text" id="price-input-form" value="<?=$last_stuffprice?>" name="stuff-price">
-                    </div>
+                        <form method="post">
 
-                    <?php
-                        if (!is_null($last_pickupdate) and !is_null($last_returndate)) {
-                            $pickupdatetimeobj = $last_pickupdate;
-                            $returndatetimeobj = $last_returndate;
-                        } else {
-                            $pickupdatetimeobj = new DateTime('NOW');
-                            $returndatetimeobj = new DateTime('TOMORROW');
-                        }
-
-                        $pickupdatetime = $pickupdatetimeobj->format('Y-m-d\TH:i');
-                        $returndatetime = $returndatetimeobj->format('Y-m-d\TH:i');
-                    ?>
-
-                    <div class="row">
-                        <div class="col-md-8">
                             <div class="form-group">
-                                <label for="pickup-location-input-form">Pickup Location: *</label>
-                                <input class="form-control" type="text" placeholder="Pickup Location Here" id="pickup-location-input-form" value="<?=$last_pickuploc?>" name="pickup-location" maxlength="255" required="required">
+                                <label for="stuff-name-input-form">Item name: *</label>
+                                <input class="form-control" type="text" placeholder="Name" id="stuff-name-input-form" value="<?=$last_stuffname?>" name="stuff-name" maxlength="255" required="required">
                             </div>
-                        </div>
-                        <div class="col-md-4">
+
                             <div class="form-group">
-                                <label for="pickup-date-input">Pickup Date: *</label>
-                                <div class='input-group' id='pickup-date-input'>
-                                    <input class="form-control" type='datetime-local' id='pickup-date-input' name='pickup-date' value="<?=htmlspecialchars($pickupdatetime)?>" required="required"/>
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                <label for="stuff-description-input-text-area">Item description:</label>
+                                <textarea class="form-control" type="text" placeholder="Description" id="stuff-description-input-text-area" name="stuff-desc" rows="3" maxlength="1024"><?=$last_stuffdesc?></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="price-input-form">Starting price: </label>
+                                <input class="form-control" type="text" id="price-input-form" value="<?=$last_stuffprice?>" name="stuff-price">
+                            </div>
+
+                            <?php
+                                if (!is_null($last_pickupdate) and !is_null($last_returndate)) {
+                                    $pickupdatetimeobj = $last_pickupdate;
+                                    $returndatetimeobj = $last_returndate;
+                                } else {
+                                    $pickupdatetimeobj = new DateTime('NOW');
+                                    $returndatetimeobj = new DateTime('TOMORROW');
+                                }
+
+                                $pickupdatetime = $pickupdatetimeobj->format('Y-m-d\TH:i');
+                                $returndatetime = $returndatetimeobj->format('Y-m-d\TH:i');
+                            ?>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="pickup-location-input-form"><i class="fa fa-map-marker" aria-hidden="true"></i> Pickup location: *</label>
+                                        <input class="form-control" type="text" placeholder="Pickup location" id="pickup-location-input-form" value="<?=$last_pickuploc?>" name="pickup-location" maxlength="255" required="required">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="pickup-date-input"><i class="fa fa-calendar-check-o" aria-hidden="true"></i> Pickup date: *</label>
+                                        <div class='input-group' id='pickup-date-input'>
+                                            <input class="form-control" type='datetime-local' id='pickup-date-input' name='pickup-date' value="<?=htmlspecialchars($pickupdatetime)?>" required="required"/>
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <label for="return-location-input-form">Return Location: *</label>
-                                <input class="form-control" type="text" placeholder="Return Location Here" id="return-location-input-form" value="<?=$last_returnloc?>" name="return-location" maxlength="255" required="required">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="return-date-input">Return Date: *</label>
-                                <div class='date input-group' id='return-date-input'>
-                                    <input class="form-control" type='datetime-local' id='return-date-input' name='return-date' value="<?=htmlspecialchars($returndatetime)?>" required="required"/>
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="return-location-input-form"><i class="fa fa-map-marker" aria-hidden="true"></i> Return location: *</label>
+                                        <input class="form-control" type="text" placeholder="Return location" id="return-location-input-form" value="<?=$last_returnloc?>" name="return-location" maxlength="255" required="required">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="return-date-input"><i class="fa fa-calendar-check-o" aria-hidden="true"></i> Return date: *</label>
+                                        <div class='date input-group' id='return-date-input'>
+                                            <input class="form-control" type='datetime-local' id='return-date-input' name='return-date' value="<?=htmlspecialchars($returndatetime)?>" required="required"/>
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-xs-1">
-                            <em>*Required</em>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="pull-right">
-                                <a class="btn btn-danger" href="./" role="button"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>
-                                <button type="submit" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i> Advertise!</button>
+                            <!-- <div class="row">
+                                <div class="col-xs-1">
+                                    <em>*Required</em>
+                                </div>
                             </div>
-                        </div>
+
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="pull-right">
+                                        <a class="btn btn-danger" href="./" role="button"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>
+                                        &nbsp;
+                                        <button type="submit" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i> Advertise!</button>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                            <div class="form-group">
+                                <em>*Required</em>
+                                <button type="submit" class="btn btn-success pull-right"><i class="fa fa-plus-circle" aria-hidden="true"></i> Advertise!</button>
+                            </div>
+
+                        </form>
                     </div>
-
-                </form>
-
+                </div>
             </div>
+
         </div>
         <!-- /.row -->
 
