@@ -71,7 +71,7 @@ if ($_POST) {
     }
 
     if (!is_valid_pickup_and_return_date($pickupdate, $returndate)) {
-        $message .= gen_alert('danger', "Invalid Pickup and Return Dates: Pickup Date must be earlier than Return Date \n");
+        $message .= gen_alert('danger', "Invalid Pickup and Return Dates: Pickup Date must be earlier than Return Date");
         $success = false;
     } else {
         $last_pickupdate = $pickupdate;

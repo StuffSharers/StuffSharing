@@ -140,18 +140,29 @@ function get_available_items() {
     }
 }
 
-function search_available_items($query) {
+function search_available_items($str_array) {
     global $db;
 
     try {
-        $str_array = explode(" ", $query);
         $statement = "SELECT name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE is_available = true";
+        $words = array();
+        $i = 0;
         foreach ($str_array as $word) {
-            $word = strtolower($word);
-            $statement .= " AND ((LOWER(name) LIKE '%" . $word . "%') OR (LOWER(description) LIKE '%" . $word . "%') OR (LOWER(pickup_locn) LIKE '%" . $word . "%') OR (LOWER(return_locn) LIKE '%" . $word . "%'))";
+            $word = "%".strtolower($word)."%";
+            $word_i = "word".$i;
+            $statement .= " AND ((LOWER(name) LIKE :".$word_i.") OR (LOWER(description) LIKE :".$word_i.") OR (LOWER(pickup_locn) LIKE :".$word_i.") OR (LOWER(return_locn) LIKE :".$word_i."))";
+            $words[$word_i] = $word;
+            $i++;
         }
         $statement .= ";";
-        return $db->query($statement);
+
+        $stmt = $db->prepare($statement, array(PDO::ATTR_EMULATE_PREPARES=>true));
+        foreach ($words as $word_i=>$word) {
+            $stmt->bindParam(':'.$word_i, $word, PDO::PARAM_STR, 256);
+        }
+        $stmt->execute();
+
+        return $stmt->fetchAll();
 
     } catch (PDOException $e) {
         die("We are unable to process your request. Please try again later.");
