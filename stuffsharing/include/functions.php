@@ -21,11 +21,11 @@ function setup_redirect() {
             case "deleteprofile":
             $redirect = "./deleteprofile.php";
             break;
-			
+
 			case "advertise":
 			$redirect = "./advertise.php";
 			break;
-			
+
             default:
             $redirect = false;
         }
@@ -135,6 +135,24 @@ function get_available_items() {
 
     try {
         return $db->query("SELECT name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE is_available = true;");
+    } catch (PDOException $e) {
+        die("We are unable to process your request. Please try again later.");
+    }
+}
+
+function search_available_items($query) {
+    global $db;
+
+    try {
+        $str_array = explode(" ", $query);
+        $statement = "SELECT name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE is_available = true";
+        foreach ($str_array as $word) {
+            $word = strtolower($word);
+            $statement .= " AND ((LOWER(name) LIKE '%" . $word . "%') OR (LOWER(description) LIKE '%" . $word . "%') OR (LOWER(pickup_locn) LIKE '%" . $word . "%') OR (LOWER(return_locn) LIKE '%" . $word . "%'))";
+        }
+        $statement .= ";";
+        return $db->query($statement);
+
     } catch (PDOException $e) {
         die("We are unable to process your request. Please try again later.");
     }

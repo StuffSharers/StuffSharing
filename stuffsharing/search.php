@@ -5,21 +5,7 @@ require("include/functions.php");
 $has_query = isset($_GET["q"]);
 
 if ($has_query) {
-    try {
-        $query = $_GET["q"];
-        $str_array = explode(" ", $query);
-        $statement = "SELECT u.username AS owner_name, u.uid AS owner_id, s.name AS name, s.description AS description, s.pickup_date AS pickup_date, s.pickup_locn AS pickup_locn, s.return_date AS return_date, s.return_locn AS return_locn FROM available_stuff s, ss_user u  WHERE s.is_available = true AND s.uid = u.uid";
-        foreach ($str_array as $word) {
-            $word = strtolower($word);
-            $statement = $statement . " AND ((LOWER(s.name) LIKE '%" . $word . "%') OR (LOWER(s.description) LIKE '%" . $word . "%') OR (LOWER(s.pickup_locn) LIKE '%" . $word . "%') OR (LOWER(s.return_locn) LIKE '%" . $word . "%'))";
-        }
-        $statement = $statement . ";";
-        $results = $db->query($statement);
-
-    } catch (Exception $e) {
-        die($e->getMessage());
-    }
-
+    $results = search_available_items($_GET["q"]);
 }
 
 ?>
