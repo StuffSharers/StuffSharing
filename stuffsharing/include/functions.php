@@ -130,11 +130,25 @@ function get_profile() {
     }
 }
 
+function get_item($sid) {
+    global $db;
+
+    try {
+        $stmt = $db->prepare("SELECT sid, name, description, pickup_date, pickup_locn, return_date, return_locn, is_available FROM ss_stuff WHERE sid = :sid;");
+        $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
+
+    } catch (PDOException $e) {
+        die("We are unable to process your request. Please try again later.");
+    }
+}
+
 function get_available_items() {
     global $db;
 
     try {
-        return $db->query("SELECT name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE is_available = true;");
+        return $db->query("SELECT sid, name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE is_available = true;");
     } catch (PDOException $e) {
         die("We are unable to process your request. Please try again later.");
     }
@@ -144,7 +158,7 @@ function search_available_items($str_array) {
     global $db;
 
     try {
-        $statement = "SELECT name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE is_available = true";
+        $statement = "SELECT sid, name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE is_available = true";
         $words = array();
         $i = 0;
         foreach ($str_array as $word) {
