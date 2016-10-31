@@ -41,7 +41,7 @@ $results = get_items_owned_by($_SESSION["uid"]);
 
                 <?php foreach($results as $result): ?><div class="col-md-4 col-sm-6 portfolio-item">
                     <a href="item.php?id=<?=$result["sid"]?>"><img class="img-responsive" src="//placehold.it/700x400" alt=""></a>
-                    <h3><a href="item.php?id=<?=$result["sid"]?>"><?=$result["name"]?></a></h3>
+                    <h3><a href="item.php?id=<?=$result["sid"]?>"><?=$result["name"]?><?=$result["is_available"] ? "" : " (sold)"?></a></h3>
                     <p><?=$result["description"]?></p>
                     <div class="row">
                         <div class="col-xs-6">

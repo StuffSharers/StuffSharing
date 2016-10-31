@@ -152,11 +152,24 @@ function get_item($sid) {
     }
 }
 
+function close_item($sid) {
+    global $db;
+
+    try {
+        $stmt = $db->prepare("UPDATE ss_stuff SET is_available = FALSE WHERE sid = :sid");
+        $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
+        $stmt->execute();
+
+    } catch (PDOException $e) {
+        die("We are unable to process your request. Please try again later.");
+    }
+}
+
 function get_available_items() {
     global $db;
 
     try {
-        return $db->query("SELECT sid, name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE is_available = true;");
+        return $db->query("SELECT sid, name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE is_available = true ORDER BY sid DESC;");
     } catch (PDOException $e) {
         die("We are unable to process your request. Please try again later.");
     }
@@ -166,7 +179,7 @@ function get_items_owned_by($uid) {
     global $db;
 
     try {
-        $stmt = $db->prepare("SELECT sid, name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE uid = :uid;");
+        $stmt = $db->prepare("SELECT sid, name, description, pickup_date, pickup_locn, return_date, return_locn, is_available FROM ss_stuff WHERE uid = :uid ORDER BY is_available DESC, sid DESC;");
         $stmt->bindParam(':uid', $uid, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll();
@@ -189,7 +202,7 @@ function search_available_items($str_array) {
             $words[$word_i] = $word;
             $i++;
         }
-        $statement .= ";";
+        $statement .= " ORDER BY sid DESC;";
 
         $stmt = $db->prepare($statement, array(PDO::ATTR_EMULATE_PREPARES=>true));
         foreach ($words as $word_i=>$word) {

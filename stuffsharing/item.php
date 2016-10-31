@@ -3,6 +3,7 @@ require("include/auth.php");
 require("include/functions.php");
 
 $sid = isset($_GET["id"]) ? $_GET["id"] : "";
+$to_close = isset($_POST["close"]) && $_POST["close"] == "1";
 
 if (!ctype_digit($sid)) {
     die();
@@ -25,6 +26,10 @@ if ($is_authed) {
     $is_owner = $item["uid"] == $_SESSION["uid"];
     if ($is_owner) {
         $current_bids = get_bids($sid);
+        if ($to_close) {
+            close_item($sid);
+            $item["is_available"] = false;
+        }
     } else {
         $your_bid = get_bid_amount_for_user($sid, $_SESSION["uid"]);
     }
@@ -47,7 +52,7 @@ if ($is_authed) {
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header"><?=$item["name"]?>
-                    <small><?=$item["is_available"] ? "available" : "not available"?></small>
+                    <small><?=$item["is_available"] ? "available" : "sold"?></small>
                 </h1>
             </div>
         </div>
@@ -95,16 +100,17 @@ if ($is_authed) {
     <?php if ($is_owner): ?>
 
                 <dl>
-                    <dt>Current bids:</dt>
+                    <dt><?=$item["is_available"] ? "Current bids" : "Winning bid"?></dt>
         <?php if ($current_bids == false): ?>
 
                     <dd>None</dd>
         <?php else: ?>
 
-                    <?php foreach($current_bids as $bid): ?><dd><?=$bid["bid_amount"]?> (by <i class="fa fa-user" aria-hidden="true"></i> <?=$bid["username"]?>)</dd><?php endforeach; ?>
+                    <?php foreach($current_bids as $bid): ?><dd><?=$bid["bid_amount"]?> (by <i class="fa fa-user" aria-hidden="true"></i> <?=$bid["username"]?>)</dd><?php if (!$item["is_available"]) break; ?><?php endforeach; ?>
         <?php endif ?>
 
                 </dl>
+                <?php if ($item["is_available"] and $current_bids != false): ?><form method="POST"><input type="hidden" name="id" value="<?=$sid?>" /><input type="hidden" name="close" value="1" /><button type="submit" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i> Accept &amp; Close</button></form><?php endif; ?>
     <?php else: ?>
 
                 <dl>
