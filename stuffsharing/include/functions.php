@@ -187,4 +187,44 @@ function search_available_items($str_array) {
     }
 }
 
+function get_bids($sid) {
+    global $db;
+
+    try {
+        $stmt = "SELECT uid, bid_amt FROM ss_bid WHERE sid = ".$sid." ORDER BY bid_amt;";
+        return $db->query($stmt);
+    } catch (PDOException $e) {
+        die("We are unable to process your request. Please try again later.");
+    }
+}
+
+function update_bid($uid, $sid, $bid_amt) {
+    global $db;
+
+    try {
+        $stmt = $db->prepare("UPDATE ss_bid SET bid_amt=:bid_amt WHERE uid=:uid AND sid=:sid");
+        $stmt->bindParam(':uid', $uid, PDO::PARAM_INT);
+        $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
+        $stmt->bindParam(':bid_amt', $bid_amt, PDO::PARAM_STR);
+
+        $stmt->execute();
+    } catch (PDOException $e) {
+        die("We are unable to process your request. Please try again later.");
+    }
+}
+
+function insert_bid($uid, $sid, $bid_amt) {
+    global $db;
+
+    try {
+        $stmt = $db->prepare("INSERT INTO ss_bid (sid, uid, bid_amt) VALUES (:sid, :uid, :bid_amt)");
+        $stmt->bindParam(':uid', $uid, PDO::PARAM_INT);
+        $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
+        $stmt->bindParam(':bid_amt', $bid_amt, PDO::PARAM_STR);
+
+        $stmt->execute();
+    } catch (PDOException $e) {
+        die("We are unable to process your request. Please try again later.");
+    }
+}
 ?>
