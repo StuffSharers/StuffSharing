@@ -14,40 +14,10 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
-SET search_path = public, pg_catalog;
-
 SET default_tablespace = '';
 
 SET default_with_oids = false;
 
---
--- Name: ss_bid; Type: TABLE; Schema: public; Owner: stuffsharers
---
-
-CREATE TABLE ss_bid (
-    sid integer NOT NULL,
-    uid integer NOT NULL,
-    bid_amt money DEFAULT 0.00 NOT NULL,
-    bid_time timestamp with time zone DEFAULT now() NOT NULL
-);
-
-
-ALTER TABLE ss_bid OWNER TO stuffsharers;
-
---
 -- Name: ss_stuff_sid_seq; Type: SEQUENCE; Schema: public; Owner: stuffsharers
 --
 
@@ -71,7 +41,7 @@ CREATE TABLE ss_stuff (
     name character varying(255) NOT NULL,
     description text,
     is_available boolean DEFAULT true NOT NULL,
-    pref_price money,
+    pref_price money DEFAULT 0 NOT NULL,
     pickup_date date NOT NULL,
     return_date date NOT NULL,
     pickup_locn character varying(255) NOT NULL,
@@ -81,6 +51,42 @@ CREATE TABLE ss_stuff (
 
 
 ALTER TABLE ss_stuff OWNER TO stuffsharers;
+
+--
+-- Name: available_stuff; Type: VIEW; Schema: public; Owner: stuffsharers
+--
+
+CREATE VIEW available_stuff AS
+ SELECT ss_stuff.sid,
+    ss_stuff.uid,
+    ss_stuff.name,
+    ss_stuff.description,
+    ss_stuff.is_available,
+    ss_stuff.pref_price,
+    ss_stuff.pickup_date,
+    ss_stuff.return_date,
+    ss_stuff.pickup_locn,
+    ss_stuff.return_locn
+   FROM ss_stuff
+  WHERE (ss_stuff.is_available = true);
+
+
+ALTER TABLE available_stuff OWNER TO stuffsharers;
+
+--
+-- Name: ss_bid; Type: TABLE; Schema: public; Owner: stuffsharers
+--
+
+CREATE TABLE ss_bid (
+    sid integer NOT NULL,
+    uid integer NOT NULL,
+    bid_amount money NOT NULL,
+    bid_date timestamp with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT ss_bid_bid_amount_check CHECK ((bid_amount > (0)::money))
+);
+
+
+ALTER TABLE ss_bid OWNER TO stuffsharers;
 
 --
 -- Name: ss_user; Type: TABLE; Schema: public; Owner: stuffsharers
@@ -131,7 +137,7 @@ ALTER TABLE ONLY ss_user ALTER COLUMN uid SET DEFAULT nextval('ss_user_uid_seq':
 -- Data for Name: ss_bid; Type: TABLE DATA; Schema: public; Owner: stuffsharers
 --
 
-COPY ss_bid (sid, uid, bid_amt, bid_time) FROM stdin;
+COPY ss_bid (sid, uid, bid_amount, bid_date) FROM stdin;
 \.
 
 
@@ -140,9 +146,9 @@ COPY ss_bid (sid, uid, bid_amt, bid_time) FROM stdin;
 --
 
 COPY ss_stuff (sid, uid, name, description, is_available, pref_price, pickup_date, return_date, pickup_locn, return_locn) FROM stdin;
-1	1	Google Bottle	Red; from Orbital 2015	t	\N	2016-09-30	2016-10-10	NUS SoC	NUS SoC
-2	1	Striped Red Shirt	Medium size	t	\N	2016-09-30	2016-10-10	NUS SoC	NUS SoC
-3	1	CS2102 Notes	Made with love	t	\N	2016-09-30	2016-10-10	NUS SoC	NUS SoC
+1	1	Google Bottle	Red; from Orbital 2015	t	0	2016-09-30	2016-10-10	NUS SoC	NUS SoC
+2	1	Striped Red Shirt	Medium size	t	0	2016-09-30	2016-10-10	NUS SoC	NUS SoC
+3	1	CS2102 Notes	Made with love	t	0	2016-09-30	2016-10-10	NUS SoC	NUS SoC
 \.
 
 
