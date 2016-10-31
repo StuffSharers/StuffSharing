@@ -47,14 +47,14 @@ $results = get_items_owned_by($_SESSION["uid"]);
                         <div class="col-xs-6">
                             <dl>
                                 <dt>Pickup:</dt>
-                                <dd><i class="fa fa-fw fa-calendar-check-o" aria-hidden="true"></i> <?=date("D d M", strtotime($result["pickup_date"]))?></dd>
+                                <dd><i class="fa fa-fw fa-calendar-check-o" aria-hidden="true"></i> <?=date("D, d M Y g:ia", strtotime($result["pickup_date"]))?></dd>
                                 <dd><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <?=$result["pickup_locn"]?></dd>
                             </dl>
                         </div>
                         <div class="col-xs-6">
                             <dl>
                                 <dt>Return:</dt>
-                                <dd><i class="fa fa-fw fa-calendar-check-o" aria-hidden="true"></i> <?=date("D d M", strtotime($result["return_date"]))?></dd>
+                                <dd><i class="fa fa-fw fa-calendar-check-o" aria-hidden="true"></i> <?=date("D, d M Y g:ia", strtotime($result["return_date"]))?></dd>
                                 <dd><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <?=$result["return_locn"]?></dd>
                             </dl>
                         </div>
