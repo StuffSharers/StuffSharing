@@ -185,8 +185,8 @@ if ($success) {
                             </div>
 
                             <div class="form-group">
-                                <label for="price-input-form"><i class="fa fa-usd" aria-hidden="true"></i> Starting price: </label>
-                                <input class="form-control" type="number" min="0" id="price-input-form" value="<?=$last_stuffprice?>" name="stuff-price">
+                                <label for="price-input-form"><i class="fa fa-usd" aria-hidden="true"></i> Starting price: *</label>
+                                <input class="form-control" type="number" min="0" id="price-input-form" value="<?=$last_stuffprice?>" name="stuff-price" required="required">
                             </div>
 
                             <div class="row">
