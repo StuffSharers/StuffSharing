@@ -52,7 +52,7 @@ if ($is_authed) {
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header"><?=$item["name"]?>
-                    <small><?=$item["is_available"] ? "available" : "sold"?></small>
+                    <small><?=$item["is_available"] ? "available" : "sold"?><?=$is_owner ? " <a href=\"#\">Edit item</a>" : ""?></small>
                 </h1>
             </div>
         </div>
@@ -121,6 +121,7 @@ if ($is_authed) {
                     <dt>Your bid:</dt>
                     <dd><?=$your_bid == false ? "None" : $your_bid?></dd>
                 </dl>
+                <div class="row"><div class="col-xs-8"><form method="POST"><div class="input-group input-group-sm"><input class="form-control" type="number" min="0" value="0.00" name="bid_amount" required="required"><span class="input-group-btn"><input type="hidden" name="id" value="<?=$sid?>" /><input type="hidden" name="close" value="1" /><button type="submit" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i> Bid</button></span></div></form></div></div>
     <?php endif ?>
 <?php else: ?>
                 <p><a href="login.php?redirect=item&id=<?=$sid?>">Login</a> to view bidding details</p>
