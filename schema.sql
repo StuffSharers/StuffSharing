@@ -185,6 +185,14 @@ ALTER TABLE ONLY ss_bid
 
 
 --
+-- Name: ss_bid_sid_bid_amount_key; Type: CONSTRAINT; Schema: public; Owner: stuffsharers
+--
+
+ALTER TABLE ONLY ss_bid
+    ADD CONSTRAINT ss_bid_sid_bid_amount_key UNIQUE (sid, bid_amount);
+
+
+--
 -- Name: ss_stuff_pkey; Type: CONSTRAINT; Schema: public; Owner: stuffsharers
 --
 
