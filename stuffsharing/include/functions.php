@@ -75,7 +75,7 @@ function is_valid_stuffname($stuffname) {
 }
 
 function is_valid_price($price) {
-	return is_numeric($price);
+	return is_numeric($price) and $price >= 0;
 }
 
 function is_valid_pickup_location($pickup_location) {
@@ -134,7 +134,7 @@ function get_item($sid) {
     global $db;
 
     try {
-        $stmt = $db->prepare("SELECT s.sid, s.name, s.description, s.pickup_date, s.pickup_locn, s.return_date, s.return_locn, s.is_available, u.username, u.email, u.contact FROM ss_stuff s, ss_user u WHERE s.sid = :sid AND s.uid = u.uid;");
+        $stmt = $db->prepare("SELECT s.sid, s.name, s.description, s.pickup_date, s.pickup_locn, s.return_date, s.return_locn, s.is_available, s.pref_price, u.username, u.email, u.contact FROM ss_stuff s, ss_user u WHERE s.sid = :sid AND s.uid = u.uid;");
         $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch();

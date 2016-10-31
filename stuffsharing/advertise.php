@@ -21,7 +21,7 @@ $success = false;
 
 $stuffname = $stuffdesc = $stuffprice = $pickupdate = $pickuploc = $returndate = $returnloc = "";
 
-if ($_POST) {
+if (isset($_POST["stuff-name"], $_POST["stuff-desc"], $_POST["stuff-price"], $_POST["pickup-date"], $_POST["pickup-location"], $_POST["return-date"], $_POST["return-location"])) {
 
     $success = true;
 
@@ -29,8 +29,6 @@ if ($_POST) {
     global $last_stuffname, $last_stuffdesc, $last_stuffprice, $last_pickupdate, $last_pickuploc, $last_returndate, $last_returnloc;
 
     $message = "";
-
-    //All neccessary Form Inputs filled in due to required field.
 
     $stuffname = neutralize_input($_POST["stuff-name"]);
     $stuffdesc = neutralize_input($_POST["stuff-desc"]);
@@ -41,7 +39,7 @@ if ($_POST) {
     $returnloc = neutralize_input($_POST["return-location"]);
 
     if (!is_valid_stuffname($stuffname)) {
-        $message .= gen_alert('danger', "Invalid Stuff Name: Must be 1 - 255 alphanumeric characters");
+        $message .= gen_alert('danger', "Invalid item name: Must be 1 - 255 characters");
         $success = false;
     } else {
         $last_stuffname = $stuffname;
@@ -50,28 +48,28 @@ if ($_POST) {
     $last_stuffdesc = $stuffdesc;
 
     if (!is_valid_price($stuffprice)) {
-        $message .= gen_alert('danger', "Invalid Stuff Price: Must be a valid numeric value");
+        $message .= gen_alert('danger', "Invalid price: Must be a valid positive numeric value");
         $success = false;
     } else {
         $last_stuffprice = $stuffprice;
     }
 
     if (!is_valid_pickup_location($pickuploc)) {
-        $message .= gen_alert('danger', "Invalid Pickup Location: Must be 1 - 255 alphanumeric characters");
+        $message .= gen_alert('danger', "Invalid pickup location: Must be 1 - 255 characters");
         $success = false;
     } else {
         $last_pickuploc = $pickuploc;
     }
 
     if (!is_valid_return_location($returnloc)) {
-        $message .= gen_alert('danger', "Invalid Return Location: Must be 1 - 255 alphanumeric characters");
+        $message .= gen_alert('danger', "Invalid return location: Must be 1 - 255 characters");
         $success = false;
     } else {
         $last_returnloc = $returnloc;
     }
 
     if (!is_valid_pickup_and_return_date($pickupdate, $returndate)) {
-        $message .= gen_alert('danger', "Invalid Pickup and Return Dates: Pickup Date must be earlier than Return Date");
+        $message .= gen_alert('danger', "Invalid pickup and return dates: return date must be later than pickup date");
         $success = false;
     } else {
         $last_pickupdate = $pickupdate;
@@ -82,6 +80,17 @@ if ($_POST) {
     //Nothing Posted
     $success = false;
 }
+
+if (!is_null($last_pickupdate) and !is_null($last_returndate)) {
+    $pickupdatetimeobj = $last_pickupdate;
+    $returndatetimeobj = $last_returndate;
+} else {
+    $pickupdatetimeobj = new DateTime('NOW');
+    $returndatetimeobj = new DateTime('TOMORROW');
+}
+
+$pickupdatetime = htmlspecialchars($pickupdatetimeobj->format('Y-m-d\TH:i'));
+$returndatetime = htmlspecialchars($returndatetimeobj->format('Y-m-d\TH:i'));
 
 if ($success) {
     // Insert into Database
@@ -96,7 +105,8 @@ if ($success) {
         global $db;
 
         $stmt = $db->prepare('INSERT INTO ss_stuff(uid, name, description, is_available, pref_price, pickup_date, pickup_locn, return_date, return_locn)
-                               VALUES (:curruid, :stuffname, :stuffdesc, :availability, :stuffprice, :pickupdate, :pickuploc, :returndate, :returnloc)');
+                              VALUES (:curruid, :stuffname, :stuffdesc, :availability, :stuffprice, :pickupdate, :pickuploc, :returndate, :returnloc)
+                              RETURNING sid');
 
         $stmt->bindParam(':curruid', $curruid, PDO::PARAM_INT);
         $stmt->bindParam(':stuffname', $stuffname, PDO::PARAM_STR, 256);
@@ -110,9 +120,16 @@ if ($success) {
 
         $stmt->execute();
 
+        $result = $stmt->fetch();
+        if ($result == false) {
+            throw new Exception("Could not get returning sid");
+        }
+
+        $sid = $result["sid"];
+
         $success = true;
 
-        $message = gen_alert("success", "Stuff Advertised!");
+        $message = gen_alert("success", "Your item has been advertised! You may view it here.");
 
     } catch (PDOException $e) {
         $message = gen_alert("danger", "We are unable to process your request. Please try again later.");
@@ -150,7 +167,9 @@ if ($success) {
                         <h3 class="panel-title"><i class="fa fa-plus-circle" aria-hidden="true"></i> Advertise</h3>
                     </div>
                     <div class="panel-body">
-
+<?php if ($success): ?>
+                        <div class="alert alert-success" role="alert">Your item has been advertised! You may view it <a href="item.php?id=<?=$sid?>">here</a>.</div>
+<?php else: ?>
                         <?=$message?>
 
                         <form method="post">
@@ -166,22 +185,9 @@ if ($success) {
                             </div>
 
                             <div class="form-group">
-                                <label for="price-input-form">Starting price: </label>
-                                <input class="form-control" type="text" id="price-input-form" value="<?=$last_stuffprice?>" name="stuff-price">
+                                <label for="price-input-form"><i class="fa fa-usd" aria-hidden="true"></i> Starting price: </label>
+                                <input class="form-control" type="number" min="0" id="price-input-form" value="<?=$last_stuffprice?>" name="stuff-price">
                             </div>
-
-                            <?php
-                                if (!is_null($last_pickupdate) and !is_null($last_returndate)) {
-                                    $pickupdatetimeobj = $last_pickupdate;
-                                    $returndatetimeobj = $last_returndate;
-                                } else {
-                                    $pickupdatetimeobj = new DateTime('NOW');
-                                    $returndatetimeobj = new DateTime('TOMORROW');
-                                }
-
-                                $pickupdatetime = $pickupdatetimeobj->format('Y-m-d\TH:i');
-                                $returndatetime = $returndatetimeobj->format('Y-m-d\TH:i');
-                            ?>
 
                             <div class="row">
                                 <div class="col-sm-6">
@@ -194,7 +200,7 @@ if ($success) {
                                     <div class="form-group">
                                         <label for="pickup-date-input"><i class="fa fa-calendar-check-o" aria-hidden="true"></i> Pickup date: *</label>
                                         <div class='input-group' id='pickup-date-input'>
-                                            <input class="form-control" type='datetime-local' id='pickup-date-input' name='pickup-date' value="<?=htmlspecialchars($pickupdatetime)?>" required="required"/>
+                                            <input class="form-control" type='datetime-local' id='pickup-date-input' name='pickup-date' value="<?=$pickupdatetime?>" required="required"/>
                                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                                         </div>
                                     </div>
@@ -212,7 +218,7 @@ if ($success) {
                                     <div class="form-group">
                                         <label for="return-date-input"><i class="fa fa-calendar-check-o" aria-hidden="true"></i> Return date: *</label>
                                         <div class='date input-group' id='return-date-input'>
-                                            <input class="form-control" type='datetime-local' id='return-date-input' name='return-date' value="<?=htmlspecialchars($returndatetime)?>" required="required"/>
+                                            <input class="form-control" type='datetime-local' id='return-date-input' name='return-date' value="<?=$returndatetime?>" required="required"/>
                                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                                         </div>
                                     </div>
@@ -241,6 +247,7 @@ if ($success) {
                             </div>
 
                         </form>
+<?php endif ?>
                     </div>
                 </div>
             </div>
