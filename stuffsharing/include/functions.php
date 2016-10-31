@@ -227,4 +227,51 @@ function insert_bid($uid, $sid, $bid_amt) {
         die("We are unable to process your request. Please try again later.");
     }
 }
+
+function get_max_bid($sid) {
+    global $db;
+
+    try {
+        $stmt = $db->prepare("SELECT MAX(bid_amount) as max_bid FROM ss_bid WHERE sid = :sid;");
+        $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return $result == false ? false : $result["max_bid"];
+
+    } catch (PDOException $e) {
+        die("We are unable to process your request. Please try again later.");
+    }
+}
+
+function get_bid_amount_for_user($sid, $uid) {
+    global $db;
+
+    try {
+        $stmt = $db->prepare("SELECT bid_amount FROM ss_bid WHERE sid = :sid AND uid = :uid;");
+        $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
+        $stmt->bindParam(':uid', $uid, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return $result == false ? false : $result["bid_amount"];
+
+    } catch (PDOException $e) {
+        die("We are unable to process your request. Please try again later.");
+    }
+}
+
+function get_username_for_bid($sid, $bid_amount) {
+    global $db;
+
+    try {
+        $stmt = $db->prepare("SELECT u.username FROM ss_bid b, ss_user u WHERE b.sid = :sid AND b.bid_amount = :bid_amount AND u.uid = b.uid;");
+        $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
+        $stmt->bindParam(':bid_amount', $bid_amount, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return $result == false ? false : $result["username"];
+
+    } catch (PDOException $e) {
+        die("We are unable to process your request. Please try again later.");
+    }
+}
 ?>

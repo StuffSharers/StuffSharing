@@ -13,6 +13,17 @@ if ($item == false) {
     die();
 }
 
+if ($is_authed) {
+    $max_bid = get_max_bid($sid);
+    if ($max_bid != false) {
+        $max_bid_username = get_username_for_bid($sid, $max_bid);
+        if ($max_bid_username == false) {
+            die();
+        }
+    }
+    $your_bid = get_bid_amount_for_user($sid, $_SESSION["uid"]);
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -76,11 +87,11 @@ if ($item == false) {
                 </dl>
                 <dl>
                     <dt>Current highest bid:</dt>
-                    <dd>$0.00</dd>
+                    <dd><?=$max_bid == false ? "None" : $max_bid?><?php if ($max_bid != false and $max_bid_username != $username): ?> (by <i class="fa fa-user" aria-hidden="true"></i> <?=$max_bid_username?>)<?php elseif ($max_bid != false and $max_bid_username == $username): ?> (by you)<?php endif ?></dd>
                 </dl>
                 <dl>
                     <dt>Your bid:</dt>
-                    <dd>$0.00</dd>
+                    <dd><?=$your_bid == false ? "None" : $your_bid?></dd>
                 </dl>
 <?php else: ?>
                 <p><a href="login.php?redirect=item&id=<?=$sid?>">Login</a> to view bidding details</p>
