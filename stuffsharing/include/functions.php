@@ -22,9 +22,13 @@ function setup_redirect() {
             $redirect = "./deleteprofile.php";
             break;
 
-			case "advertise":
-			$redirect = "./advertise.php";
-			break;
+            case "advertise":
+            $redirect = "./advertise.php";
+            break;
+
+            case "item":
+            $redirect = isset($_GET["id"]) ? "./item.php?id=".$_GET["id"] : false;
+            break;
 
             default:
             $redirect = false;
@@ -39,15 +43,15 @@ function gen_alert($class, $message) {
 }
 
 function gen_date_from_datetime_local_str($datetime_local_str) {
-	return new DateTime($datetime_local_str);
+    return new DateTime($datetime_local_str);
 }
 
 function neutralize_input($data) {
-	//Taken from http://www.w3schools.com/php/php_form_validation.asp
-	$data = trim($data);
-	$data = stripslashes($data);
-	$data = htmlspecialchars($data);
-	return $data;
+    //Taken from http://www.w3schools.com/php/php_form_validation.asp
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
 }
 
 function is_valid_username($username) {
@@ -71,23 +75,23 @@ function is_valid_contact($contact) {
 }
 
 function is_valid_stuffname($stuffname) {
-	return strlen($stuffname) >= 1 && strlen($stuffname) <= 255;
+    return strlen($stuffname) >= 1 && strlen($stuffname) <= 255;
 }
 
 function is_valid_price($price) {
-	return is_numeric($price) and $price >= 0;
+    return is_numeric($price) and $price >= 0;
 }
 
 function is_valid_pickup_location($pickup_location) {
-	return strlen($pickup_location) >= 1 && strlen($pickup_location) <= 255;
+    return strlen($pickup_location) >= 1 && strlen($pickup_location) <= 255;
 }
 
 function is_valid_return_location($return_location) {
-	return strlen($return_location) >= 1 && strlen($return_location) <= 255;
+    return strlen($return_location) >= 1 && strlen($return_location) <= 255;
 }
 
 function is_valid_pickup_and_return_date($pickup_date, $return_date) {
-	return $pickup_date < $return_date;
+    return $pickup_date < $return_date;
 }
 
 function get_profile() {

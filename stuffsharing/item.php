@@ -69,8 +69,23 @@ if ($item == false) {
 
             <div class="col-md-3 col-sm-6">
                 <h3>Bidding</h3>
+<?php if ($is_authed): ?>
+                <dl>
+                    <dt>Starting price:</dt>
+                    <dd><?=$item["pref_price"]?></dd>
+                </dl>
+                <dl>
+                    <dt>Current highest bid:</dt>
+                    <dd>$0.00</dd>
+                </dl>
+                <dl>
+                    <dt>Your bid:</dt>
+                    <dd>$0.00</dd>
+                </dl>
+<?php else: ?>
+                <p><a href="login.php?redirect=item&id=<?=$sid?>">Login</a> to view bidding details</p>
+<?php endif ?>
             </div>
-
         </div>
         <!-- /.row -->
 
