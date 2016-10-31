@@ -30,6 +30,10 @@ function setup_redirect() {
             $redirect = isset($_GET["id"]) ? "./item.php?id=".$_GET["id"] : false;
             break;
 
+            case "mystuff":
+            $redirect = "./mystuff.php";
+            break;
+
             default:
             $redirect = false;
         }
@@ -153,6 +157,19 @@ function get_available_items() {
 
     try {
         return $db->query("SELECT sid, name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE is_available = true;");
+    } catch (PDOException $e) {
+        die("We are unable to process your request. Please try again later.");
+    }
+}
+
+function get_items_owned_by($uid) {
+    global $db;
+
+    try {
+        $stmt = $db->prepare("SELECT sid, name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE uid = :uid;");
+        $stmt->bindParam(':uid', $uid, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll();
     } catch (PDOException $e) {
         die("We are unable to process your request. Please try again later.");
     }

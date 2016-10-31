@@ -20,6 +20,11 @@
                     <li>
                         <a href="./advertise.php">Advertise</a>
                     </li>
+<?php if ($is_authed): ?>
+                    <li>
+                        <a href="./mystuff.php">My Stuff</a>
+                    </li>
+<?php endif ?>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
 <?php if ($is_authed): ?>
@@ -32,7 +37,7 @@
                     </li>
 <?php else: ?>
                     <li>
-                        <a href="login.php?redirect=main"><i class="fa fa-fw fa-sign-in" aria-hidden="true"></i> Login</a>
+                        <a href="login.php?redirect=mystuff"><i class="fa fa-fw fa-sign-in" aria-hidden="true"></i> Login</a>
                     </li>
                     <li>
                         <a href="register.php"><i class="fa fa-fw fa-user-plus" aria-hidden="true"></i> Register</a>
