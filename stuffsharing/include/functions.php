@@ -134,7 +134,7 @@ function get_item($sid) {
     global $db;
 
     try {
-        $stmt = $db->prepare("SELECT sid, name, description, pickup_date, pickup_locn, return_date, return_locn, is_available FROM ss_stuff WHERE sid = :sid;");
+        $stmt = $db->prepare("SELECT s.sid, s.name, s.description, s.pickup_date, s.pickup_locn, s.return_date, s.return_locn, s.is_available, u.username, u.email, u.contact FROM ss_stuff s, ss_user u WHERE s.sid = :sid AND s.uid = u.uid;");
         $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch();

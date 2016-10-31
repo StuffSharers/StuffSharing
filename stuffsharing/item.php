@@ -43,9 +43,11 @@ if ($item == false) {
                 <img class="img-responsive" src="http://placehold.it/750x500" alt="">
             </div>
 
-            <div class="col-md-6">
-                <h3>Description</h3>
-                <p><?=$item["description"]?></p>
+            <div class="col-md-3 col-sm-6">
+                <?php if (!empty($item["description"])): ?><h3>Description</h3>
+                <p><?=$item["description"]?></p><?php endif ?>
+
+                <h3>Details</h3>
                 <dl>
                     <dt>Pickup:</dt>
                     <dd><i class="fa fa-fw fa-calendar-check-o" aria-hidden="true"></i> <?=date("D d M", strtotime($item["pickup_date"]))?></dd>
@@ -56,6 +58,17 @@ if ($item == false) {
                     <dd><i class="fa fa-fw fa-calendar-check-o" aria-hidden="true"></i> <?=date("D d M", strtotime($item["return_date"]))?></dd>
                     <dd><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <?=$item["return_locn"]?></dd>
                 </dl>
+                <dl>
+                    <dt>Owner:</dt>
+                    <dd><i class="fa fa-fw fa-user" aria-hidden="true"></i> <?=$item["username"]?></dd>
+                    <dd><i class="fa fa-fw fa-envelope-o" aria-hidden="true"></i> <a href="mailto:<?=$item["email"]?>"><?=$item["email"]?></a></dd>
+                    <?php if (!empty($item["contact"])): ?><dd><i class="fa fa-fw fa-phone" aria-hidden="true"></i> <a href="tel:<?=$item["contact"]?>"><?=$item["contact"]?></a></dd><?php endif ?>
+
+                </dl>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <h3>Bidding</h3>
             </div>
 
         </div>
