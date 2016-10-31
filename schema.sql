@@ -42,8 +42,8 @@ CREATE TABLE ss_stuff (
     description text,
     is_available boolean DEFAULT true NOT NULL,
     pref_price money DEFAULT 0 NOT NULL,
-    pickup_date date NOT NULL,
-    return_date date NOT NULL,
+    pickup_date timestamp with time zone DEFAULT now() NOT NULL,
+    return_date timestamp with time zone DEFAULT now() NOT NULL,
     pickup_locn character varying(255) NOT NULL,
     return_locn character varying(255) NOT NULL,
     CONSTRAINT ss_stuff_check CHECK ((return_date > pickup_date))
@@ -146,9 +146,9 @@ COPY ss_bid (sid, uid, bid_amount, bid_date) FROM stdin;
 --
 
 COPY ss_stuff (sid, uid, name, description, is_available, pref_price, pickup_date, return_date, pickup_locn, return_locn) FROM stdin;
-1	1	Google Bottle	Red; from Orbital 2015	t	0	2016-09-30	2016-10-10	NUS SoC	NUS SoC
-2	1	Striped Red Shirt	Medium size	t	0	2016-09-30	2016-10-10	NUS SoC	NUS SoC
-3	1	CS2102 Notes	Made with love	t	0	2016-09-30	2016-10-10	NUS SoC	NUS SoC
+1	1	Google Bottle	Red; from Orbital 2015	t	0	2016-09-30 15:30:00	2016-10-10 15:30:00	NUS SoC	NUS SoC
+2	1	Striped Red Shirt	Medium size	t	0	2016-09-30 15:30:00	2016-10-10 15:30:00	NUS SoC	NUS SoC
+3	1	CS2102 Notes	Made with love	t	0	2016-09-30 15:30:00	2016-10-10 15:30:00	NUS SoC	NUS SoC
 \.
 
 
