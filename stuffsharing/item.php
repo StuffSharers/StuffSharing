@@ -21,7 +21,13 @@ if ($is_authed) {
             die();
         }
     }
-    $your_bid = get_bid_amount_for_user($sid, $_SESSION["uid"]);
+
+    $is_owner = $item["uid"] == $_SESSION["uid"];
+    if ($is_owner) {
+        $current_bids = get_bids($sid);
+    } else {
+        $your_bid = get_bid_amount_for_user($sid, $_SESSION["uid"]);
+    }
 }
 
 ?>
@@ -81,10 +87,26 @@ if ($is_authed) {
             <div class="col-md-3 col-sm-6">
                 <h3>Bidding</h3>
 <?php if ($is_authed): ?>
+
                 <dl>
                     <dt>Starting price:</dt>
                     <dd><?=$item["pref_price"]?></dd>
                 </dl>
+    <?php if ($is_owner): ?>
+
+                <dl>
+                    <dt>Current bids:</dt>
+        <?php if ($current_bids == false): ?>
+
+                    <dd>None</dd>
+        <?php else: ?>
+
+                    <?php foreach($current_bids as $bid): ?><dd><?=$bid["bid_amount"]?> (by <i class="fa fa-user" aria-hidden="true"></i> <?=$bid["username"]?>)</dd><?php endforeach; ?>
+        <?php endif ?>
+
+                </dl>
+    <?php else: ?>
+
                 <dl>
                     <dt>Current highest bid:</dt>
                     <dd><?=$max_bid == false ? "None" : $max_bid?><?php if ($max_bid != false and $max_bid_username != $username): ?> (by <i class="fa fa-user" aria-hidden="true"></i> <?=$max_bid_username?>)<?php elseif ($max_bid != false and $max_bid_username == $username): ?> (by you)<?php endif ?></dd>
@@ -93,6 +115,7 @@ if ($is_authed) {
                     <dt>Your bid:</dt>
                     <dd><?=$your_bid == false ? "None" : $your_bid?></dd>
                 </dl>
+    <?php endif ?>
 <?php else: ?>
                 <p><a href="login.php?redirect=item&id=<?=$sid?>">Login</a> to view bidding details</p>
 <?php endif ?>

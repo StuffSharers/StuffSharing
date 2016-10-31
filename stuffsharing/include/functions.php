@@ -138,7 +138,7 @@ function get_item($sid) {
     global $db;
 
     try {
-        $stmt = $db->prepare("SELECT s.sid, s.name, s.description, s.pickup_date, s.pickup_locn, s.return_date, s.return_locn, s.is_available, s.pref_price, u.username, u.email, u.contact FROM ss_stuff s, ss_user u WHERE s.sid = :sid AND s.uid = u.uid;");
+        $stmt = $db->prepare("SELECT s.sid, s.name, s.description, s.pickup_date, s.pickup_locn, s.return_date, s.return_locn, s.is_available, s.pref_price, u.uid, u.username, u.email, u.contact FROM ss_stuff s, ss_user u WHERE s.sid = :sid AND s.uid = u.uid;");
         $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch();
@@ -191,9 +191,10 @@ function get_bids($sid) {
     global $db;
 
     try {
-        $stmt = "SELECT uid, bid_amount FROM ss_bid WHERE sid = :sid ORDER BY bid_amount;";
+        $stmt = $db->prepare("SELECT u.username, b.bid_amount FROM ss_bid b, ss_user u WHERE b.sid = :sid AND b.uid = u.uid ORDER BY b.bid_amount DESC;");
         $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
-        return $db->query($stmt);
+        $stmt->execute();
+        return $stmt->fetchAll();
     } catch (PDOException $e) {
         die("We are unable to process your request. Please try again later.");
     }
