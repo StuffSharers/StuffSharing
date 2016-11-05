@@ -30,6 +30,10 @@ function setup_redirect() {
             $redirect = isset($_GET["id"]) ? "./item.php?id=".$_GET["id"] : false;
             break;
 
+            case "edititem":
+            $redirect = isset($_GET["id"]) ? "./edititem.php?id=".$_GET["id"] : false;
+            break;
+
             case "mystuff":
             $redirect = "./mystuff.php";
             break;

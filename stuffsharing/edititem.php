@@ -2,16 +2,7 @@
 require("include/auth.php");
 require("include/functions.php");
 
-if (!$is_authed) {
-    header('Location: login.php');
-    die();
-}
-
-if (!isset($_GET["id"])) {
-    die();
-}
-
-$sid = $_GET["id"];
+$sid = isset($_GET["id"]) ? $_GET["id"] : "";
 
 if (!ctype_digit($sid)) {
     die();
@@ -22,9 +13,14 @@ if ($item == false) {
     die();
 }
 
+if (!$is_authed) {
+    header('Location: login.php?redirect=edititem&id='.$sid);
+    die();
+}
+
 if ($item["uid"] !== (int) $_SESSION["uid"]) {
     // Stuff does not belong to user
-    die();
+    die("Only the owner is allowed to edit the item!");
 }
 
 /**
