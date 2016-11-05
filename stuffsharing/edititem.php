@@ -12,7 +12,15 @@ if (!isset($_GET["id"])) {
 }
 
 $sid = $_GET["id"];
+
+if (!ctype_digit($sid)) {
+    die();
+}
+
 $item = get_item($sid);
+if ($item == false) {
+    die();
+}
 
 if ($item["uid"] !== (int) $_SESSION["uid"]) {
     // Stuff does not belong to user
@@ -104,11 +112,11 @@ if (isset($_POST["stuff-name"], $_POST["stuff-desc"], $_POST["stuff-price"], $_P
 }
 
 if (!is_null($last_pickupdate) and !is_null($last_returndate)) {
-	/**
+    /**
     $pickupdatetimeobj = DateTime::createFromFormat("Y-m-d H:i:sP", $last_pickupdate);
     $returndatetimeobj = DateTime::createFromFormat("Y-m-d H:i:sP", $last_returndate);
-	**/
-	$pickupdatetimeobj = $last_pickupdate;
+    **/
+    $pickupdatetimeobj = $last_pickupdate;
     $returndatetimeobj = $last_returndate;
 } else {
     $pickupdatetimeobj = new DateTime('NOW');
@@ -131,10 +139,10 @@ if ($success) {
     try {
         global $db;
 
-		$stmt = $db->prepare('UPDATE ss_stuff SET name=:stuffname, description=:stuffdesc, pref_price=:stuffprice, pickup_date=:pickupdate, pickup_locn=:pickuploc, return_date=:returndate, return_locn=:returnloc WHERE uid=:curruid AND sid=:sid');
+        $stmt = $db->prepare('UPDATE ss_stuff SET name=:stuffname, description=:stuffdesc, pref_price=:stuffprice, pickup_date=:pickupdate, pickup_locn=:pickuploc, return_date=:returndate, return_locn=:returnloc WHERE uid=:curruid AND sid=:sid');
 
         $stmt->bindParam(':curruid', $curruid, PDO::PARAM_INT);
-		$stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
+        $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
         $stmt->bindParam(':stuffname', $stuffname, PDO::PARAM_STR, 256);
         $stmt->bindParam(':stuffdesc', $stuffdesc, is_null($stuffdesc) ? PDO::PARAM_NULL : PDO::PARAM_STR);
         $stmt->bindParam(':stuffprice', $stuffprice, PDO::PARAM_STR);
@@ -142,10 +150,10 @@ if ($success) {
         $stmt->bindParam(':pickuploc', $pickuploc, PDO::PARAM_STR, 256);
         $stmt->bindParam(':returndate', $returndate->format('Y-m-d H:i'), PDO::PARAM_STR);
         $stmt->bindParam(':returnloc', $returnloc, PDO::PARAM_STR, 256);
-		
+
         $stmt->execute();
 
-		echo var_export($stmt->errorInfo());
+        // echo var_export($stmt->errorInfo());
         $success = true;
 
         $message = gen_alert("success", "Your item has been advertised! You may view it here.");
