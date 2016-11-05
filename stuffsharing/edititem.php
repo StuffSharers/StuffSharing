@@ -18,7 +18,9 @@ if (!$is_authed) {
     die();
 }
 
-if ($item["uid"] !== (int) $_SESSION["uid"]) {
+$is_owner = $is_admin || $item["uid"] == $_SESSION["uid"];
+
+if (!$is_owner) {
     // Stuff does not belong to user
     die("Only the owner is allowed to edit the item!");
 }

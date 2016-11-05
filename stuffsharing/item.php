@@ -23,7 +23,7 @@ if ($is_authed) {
         }
     }
 
-    $is_owner = $item["uid"] == $_SESSION["uid"];
+    $is_owner = $is_admin || $item["uid"] == $_SESSION["uid"];
     if ($is_owner) {
         $current_bids = get_bids($sid);
         if ($to_close) {
