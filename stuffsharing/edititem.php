@@ -130,18 +130,12 @@ if ($success) {
     // Insert into Database
     // Adapted from: http://stackoverflow.com/questions/60174/how-can-i-prevent-sql-injection-in-php
 
-    $curruid = $_SESSION["uid"];
-    get_profile();
-
-
-    $availability = true;
-
     try {
         global $db;
 
         $stmt = $db->prepare('UPDATE ss_stuff SET name=:stuffname, description=:stuffdesc, pref_price=:stuffprice, pickup_date=:pickupdate, pickup_locn=:pickuploc, return_date=:returndate, return_locn=:returnloc WHERE uid=:curruid AND sid=:sid');
 
-        $stmt->bindParam(':curruid', $curruid, PDO::PARAM_INT);
+        $stmt->bindParam(':curruid', $_SESSION["uid"], PDO::PARAM_INT);
         $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
         $stmt->bindParam(':stuffname', $stuffname, PDO::PARAM_STR, 256);
         $stmt->bindParam(':stuffdesc', $stuffdesc, is_null($stuffdesc) ? PDO::PARAM_NULL : PDO::PARAM_STR);
@@ -251,25 +245,11 @@ if ($success) {
                                 </div>
                             </div>
 
-                            <!-- <div class="row">
-                                <div class="col-xs-1">
-                                    <em>*Required</em>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="pull-right">
-                                        <a class="btn btn-danger" href="./" role="button"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>
-                                        &nbsp;
-                                        <button type="submit" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i> Advertise!</button>
-                                    </div>
-                                </div>
-                            </div> -->
-
-                            <div class="form-group">
-                                <em>*Required</em>
-                                <button type="submit" class="btn btn-success pull-right"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
+                            <em>*Required</em>
+                            <div class="form-group pull-right">
+                                <button type="reset" class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i> Reset</button>
+                                &nbsp;
+                                <button type="submit" class="btn btn-success"><i class="fa fa-pencil" aria-hidden="true"></i> Save</button>
                             </div>
 
                         </form>

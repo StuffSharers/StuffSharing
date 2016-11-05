@@ -96,22 +96,16 @@ if ($success) {
     // Insert into Database
     // Adapted from: http://stackoverflow.com/questions/60174/how-can-i-prevent-sql-injection-in-php
 
-    $curruid = $_SESSION["uid"];
-    get_profile();
-
-    $availability = true;
-
     try {
         global $db;
 
-        $stmt = $db->prepare('INSERT INTO ss_stuff(uid, name, description, is_available, pref_price, pickup_date, pickup_locn, return_date, return_locn)
-                              VALUES (:curruid, :stuffname, :stuffdesc, :availability, :stuffprice, :pickupdate, :pickuploc, :returndate, :returnloc)
+        $stmt = $db->prepare('INSERT INTO ss_stuff(uid, name, description, pref_price, pickup_date, pickup_locn, return_date, return_locn)
+                              VALUES (:curruid, :stuffname, :stuffdesc, :stuffprice, :pickupdate, :pickuploc, :returndate, :returnloc)
                               RETURNING sid');
 
-        $stmt->bindParam(':curruid', $curruid, PDO::PARAM_INT);
+        $stmt->bindParam(':curruid', $_SESSION["uid"], PDO::PARAM_INT);
         $stmt->bindParam(':stuffname', $stuffname, PDO::PARAM_STR, 256);
         $stmt->bindParam(':stuffdesc', $stuffdesc, is_null($stuffdesc) ? PDO::PARAM_NULL : PDO::PARAM_STR);
-        $stmt->bindParam(':availability', $availability, PDO::PARAM_BOOL);
         $stmt->bindParam(':stuffprice', $stuffprice, PDO::PARAM_STR);
         $stmt->bindParam(':pickupdate', $pickupdate->format('Y-m-d H:i'), PDO::PARAM_STR);
         $stmt->bindParam(':pickuploc', $pickuploc, PDO::PARAM_STR, 256);
@@ -224,22 +218,6 @@ if ($success) {
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- <div class="row">
-                                <div class="col-xs-1">
-                                    <em>*Required</em>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="pull-right">
-                                        <a class="btn btn-danger" href="./" role="button"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>
-                                        &nbsp;
-                                        <button type="submit" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i> Advertise!</button>
-                                    </div>
-                                </div>
-                            </div> -->
 
                             <div class="form-group">
                                 <em>*Required</em>
