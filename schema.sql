@@ -82,7 +82,7 @@ CREATE TABLE ss_bid (
     uid integer NOT NULL,
     bid_amount money NOT NULL,
     bid_date timestamp with time zone DEFAULT now() NOT NULL,
-    CONSTRAINT ss_bid_bid_amount_check CHECK ((bid_amount > (0)::money))
+    CONSTRAINT ss_bid_bid_amount_check CHECK ((bid_amount >= (0)::money))
 );
 
 
