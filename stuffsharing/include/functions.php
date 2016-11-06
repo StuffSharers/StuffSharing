@@ -192,7 +192,7 @@ function get_items_owned_by($uid) {
     }
 }
 
-function search_available_items($str_array) {
+function search_available_items($str_array, $min_price, $max_price, $pickup_start, $pickup_end, $return_start, $return_end) {
     global $db;
 
     try {
@@ -206,12 +206,29 @@ function search_available_items($str_array) {
             $words[$word_i] = $word;
             $i++;
         }
+        $statement .= empty($min_price) ? "" : " AND pref_price >= :min_price";
+        $statement .= empty($max_price) ? "" : " AND pref_price <= :max_price";
+        $statement .= empty($pickup_start) ? "" : " AND pickup_date >= :pickup_start";
+        $statement .= empty($pickup_end) ? "" : " AND pickup_date <= :pickup_end";
+        $statement .= empty($return_start) ? "" : " AND return_date >= :return_start";
+        $statement .= empty($return_end) ? "" : " AND return_date <= :return_end";
         $statement .= " ORDER BY sid DESC;";
-
         $stmt = $db->prepare($statement, array(PDO::ATTR_EMULATE_PREPARES=>true));
         foreach ($words as $word_i=>$word) {
             $stmt->bindParam(':'.$word_i, $word, PDO::PARAM_STR, 256);
         }
+        if (!empty($min_price))
+            $stmt->bindParam(":min_price", $min_price, PDO::PARAM_STR);
+        if (!empty($max_price))
+            $stmt->bindParam(":max_price", $max_price, PDO::PARAM_STR);
+        if (!empty($pickup_start))
+            $stmt->bindParam(":pickup_start", $pickup_start, PDO::PARAM_STR);
+        if (!empty($pickup_end))
+            $stmt->bindParam(":pickup_end", $pickup_end, PDO::PARAM_STR);
+        if (!empty($return_start))
+            $stmt->bindParam(":return_start", $return_start, PDO::PARAM_STR);
+        if (!empty($return_end))
+            $stmt->bindParam(":return_end", $return_end, PDO::PARAM_STR);
         $stmt->execute();
 
         return $stmt->fetchAll();
