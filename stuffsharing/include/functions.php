@@ -234,7 +234,6 @@ function search_available_items($str_array, $min_price, $max_price, $pickup_star
         return $stmt->fetchAll();
 
     } catch (PDOException $e) {
-        var_dump($e);
         die("We are unable to process your request. Please try again later.");
     }
 }
