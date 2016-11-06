@@ -3,6 +3,7 @@ require("include/auth.php");
 require("include/functions.php");
 
 $sid = isset($_GET["id"]) ? $_GET["id"] : "";
+var_dump($_POST);
 
 if (!ctype_digit($sid)) {
     die();
@@ -133,7 +134,6 @@ if ($success) {
 
         $stmt = $db->prepare('UPDATE ss_stuff SET name=:stuffname, description=:stuffdesc, pref_price=:stuffprice, pickup_date=:pickupdate, pickup_locn=:pickuploc, return_date=:returndate, return_locn=:returnloc WHERE sid=:sid');
 
-        //$stmt->bindParam(':curruid', $_SESSION["uid"], PDO::PARAM_INT);
         $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
         $stmt->bindParam(':stuffname', $stuffname, PDO::PARAM_STR, 256);
         $stmt->bindParam(':stuffdesc', $stuffdesc, is_null($stuffdesc) ? PDO::PARAM_NULL : PDO::PARAM_STR);
@@ -142,8 +142,6 @@ if ($success) {
         $stmt->bindParam(':pickuploc', $pickuploc, PDO::PARAM_STR, 256);
         $stmt->bindParam(':returndate', $returndate->format('Y-m-d H:i'), PDO::PARAM_STR);
         $stmt->bindParam(':returnloc', $returnloc, PDO::PARAM_STR, 256);
-
-        var_dump($stuffdesc);
 
         $stmt->execute();
 
@@ -247,6 +245,8 @@ if ($success) {
 
                             <em>*Required</em>
                             <div class="form-group pull-right">
+                                <a class="btn btn-danger" href='<?="deleteitem.php?id=".$sid?>'><i class="fa fa-trash" aria-hidden="true"></i> Delete item</a>
+                                &nbsp;
                                 <button type="reset" class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i> Reset</button>
                                 &nbsp;
                                 <button type="submit" class="btn btn-success"><i class="fa fa-pencil" aria-hidden="true"></i> Save</button>
@@ -267,5 +267,8 @@ if ($success) {
     <!-- /.container -->
 
 </body>
+<script type="text/javascript">
+
+</script>
 
 </html>
