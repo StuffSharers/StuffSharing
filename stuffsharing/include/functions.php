@@ -196,7 +196,7 @@ function search_available_items($str_array, $min_price, $max_price, $pickup_star
     global $db;
 
     try {
-        $statement = "SELECT sid, name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE is_available = true";
+        $statement = "SELECT sid, name, description, pickup_date, pickup_locn, return_date, return_locn FROM available_stuff WHERE true";
         $words = array();
         $i = 0;
         foreach ($str_array as $word) {
@@ -234,6 +234,7 @@ function search_available_items($str_array, $min_price, $max_price, $pickup_star
         return $stmt->fetchAll();
 
     } catch (PDOException $e) {
+        var_dump($e);
         die("We are unable to process your request. Please try again later.");
     }
 }
