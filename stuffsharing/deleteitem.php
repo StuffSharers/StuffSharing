@@ -7,7 +7,6 @@ if (!$is_authed) {
 } else if (!isset($_GET["id"]) && !isset($_POST["sid"])) {
     die();
 }
-var_dump($_POST);
 
 $sid = isset($_GET["id"]) ? $_GET["id"] : $_POST["sid"];
 $item = get_item($sid);
@@ -41,7 +40,7 @@ if ($is_owner && $confirm_delete) {
 
 <?php include("partials/head.html") ?>
 <?php 
-    if($success)
+    if ($success)
         header('Refresh: 3; URL=mystuff.php');
 ?>
 
