@@ -3,7 +3,6 @@ require("include/auth.php");
 require("include/functions.php");
 
 $sid = isset($_GET["id"]) ? $_GET["id"] : "";
-var_dump($_POST);
 
 if (!ctype_digit($sid)) {
     die();
