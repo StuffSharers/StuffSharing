@@ -131,9 +131,9 @@ if ($success) {
     try {
         global $db;
 
-        $stmt = $db->prepare('UPDATE ss_stuff SET name=:stuffname, description=:stuffdesc, pref_price=:stuffprice, pickup_date=:pickupdate, pickup_locn=:pickuploc, return_date=:returndate, return_locn=:returnloc WHERE uid=:curruid AND sid=:sid');
+        $stmt = $db->prepare('UPDATE ss_stuff SET name=:stuffname, description=:stuffdesc, pref_price=:stuffprice, pickup_date=:pickupdate, pickup_locn=:pickuploc, return_date=:returndate, return_locn=:returnloc WHERE sid=:sid');
 
-        $stmt->bindParam(':curruid', $_SESSION["uid"], PDO::PARAM_INT);
+        //$stmt->bindParam(':curruid', $_SESSION["uid"], PDO::PARAM_INT);
         $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
         $stmt->bindParam(':stuffname', $stuffname, PDO::PARAM_STR, 256);
         $stmt->bindParam(':stuffdesc', $stuffdesc, is_null($stuffdesc) ? PDO::PARAM_NULL : PDO::PARAM_STR);
@@ -142,6 +142,8 @@ if ($success) {
         $stmt->bindParam(':pickuploc', $pickuploc, PDO::PARAM_STR, 256);
         $stmt->bindParam(':returndate', $returndate->format('Y-m-d H:i'), PDO::PARAM_STR);
         $stmt->bindParam(':returnloc', $returnloc, PDO::PARAM_STR, 256);
+
+        var_dump($stuffdesc);
 
         $stmt->execute();
 
