@@ -74,7 +74,7 @@ if ($has_query) {
                 	<div class="input-group" style="margin-bottom: 25px">
 	                    <input type="text" class="form-control" name="q" placeholder="Search for available stuff" value="<?=$query?>" />
 	                	<span class="input-group-btn">
-	                    	<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius:0; margin-left:-1px"><i class="fa fa-filter" aria-hidden="true"></i> 
+	                    	<button type="button" class="btn btn-default dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius:0; margin-left:-1px"><i class="fa fa-filter" aria-hidden="true"></i>
 	                    		<span class="caret"></span>
 					        </button>
 					        <!-- Dropdown menu -->
@@ -91,7 +91,7 @@ if ($has_query) {
 						 					<input type="text" name="max_price" class="form-control input-sm">
 						 				</div>
 						 			</div>
-						 		</div>	
+						 		</div>
 						 		<div class="form-horizontal" role="form">
 						 			<span class="dropdown-header"><i class="fa fa-calendar" aria-hidden="true"></i> Pickup Date</span>
 						 			<div class="form-group input-daterange clearfix" style="margin-left: 0; margin-right: 0">
@@ -119,7 +119,7 @@ if ($has_query) {
 						 			</div>
 						 		</div>
 					        </div>
-					        <!-- /.dropdown-menu -->   
+					        <!-- /.dropdown-menu -->
 		                </span>
 		                <!-- Submit button -->
 	                    <span class="input-group-btn">
@@ -142,14 +142,14 @@ if ($has_query) {
                     <div class="col-xs-6">
                         <dl>
                             <dt>Pickup:</dt>
-                            <dd><i class="fa fa-fw fa-calendar-check-o" aria-hidden="true"></i> <?=date("D d M Y g:ia", strtotime($result["pickup_date"]))?></dd>
+                            <dd><i class="fa fa-fw fa-calendar-check-o" aria-hidden="true"></i> <?=date("D j M'y g:ia", strtotime($result["pickup_date"]))?></dd>
                             <dd><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <?=$result["pickup_locn"]?></dd>
                         </dl>
                     </div>
                     <div class="col-xs-6">
                         <dl>
                             <dt>Return:</dt>
-                            <dd><i class="fa fa-fw fa-calendar-check-o" aria-hidden="true"></i> <?=date("D d M Y g:ia", strtotime($result["return_date"]))?></dd>
+                            <dd><i class="fa fa-fw fa-calendar-check-o" aria-hidden="true"></i> <?=date("D j M'y g:ia", strtotime($result["return_date"]))?></dd>
                             <dd><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <?=$result["return_locn"]?></dd>
                         </dl>
                     </div>
