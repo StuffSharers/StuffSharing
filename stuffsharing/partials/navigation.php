@@ -20,9 +20,15 @@
                     <li>
                         <a href="./advertise.php">Advertise</a>
                     </li>
+                    <li>
+                        <a href="./sold.php">Sold Stuff</a>
+                    </li>
 <?php if ($is_authed): ?>
                     <li>
                         <a href="./mystuff.php">My Stuff</a>
+                    </li>
+                    <li>
+                        <a href="./myborrowedstuff.php">My Borrowed Stuff</a>
                     </li>
 <?php endif ?>
                 </ul>

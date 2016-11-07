@@ -21,7 +21,10 @@ if ($is_authed) {
     $curr_uid = $_SESSION["uid"];
 
     $is_owner = $is_admin || $item["uid"] == $curr_uid;
-    if ($is_owner) {
+    if (!$item["is_available"]) {
+        $current_bids = get_bids($sid);
+
+    } elseif ($is_owner) {
         $current_bids = get_bids($sid);
         if ($to_close) {
             close_item($sid);
@@ -115,7 +118,20 @@ if ($is_authed) {
                     <dt>Starting price:</dt>
                     <dd><?=$item["pref_price"]?></dd>
                 </dl>
-    <?php if ($is_owner): ?>
+    <?php if (!$item["is_available"]): ?>
+
+                <dl>
+                    <dt>Winning bid</dt>
+        <?php if ($current_bids == false): ?>
+
+                    <dd>None</dd>
+        <?php else: ?>
+
+                    <?php foreach($current_bids as $bid): ?><dd><?=$bid["bid_amount"]?> (by <i class="fa fa-user" aria-hidden="true"></i> <?=$bid["username"]?>)</dd><?php if (!$item["is_available"]) break; ?><?php endforeach; ?>
+        <?php endif ?>
+                </dl>
+
+    <?php elseif ($is_owner): ?>
 
                 <dl>
                     <dt><?=$item["is_available"] ? "Current bids" : "Winning bid"?></dt>

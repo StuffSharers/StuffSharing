@@ -181,7 +181,17 @@ function get_available_items() {
     global $db;
 
     try {
-        return $db->query("SELECT sid, name, description, pickup_date, pickup_locn, return_date, return_locn FROM ss_stuff WHERE is_available = true ORDER BY sid DESC;");
+        return $db->query("SELECT sid, name, description, pickup_date, pickup_locn, return_date, return_locn, is_available FROM ss_stuff WHERE is_available = true ORDER BY sid DESC;");
+    } catch (PDOException $e) {
+        die("We are unable to process your request. Please try again later.");
+    }
+}
+
+function get_sold_items() {
+    global $db;
+
+    try {
+        return $db->query("SELECT sid, name, description, pickup_date, pickup_locn, return_date, return_locn, is_available FROM ss_stuff WHERE is_available = false ORDER BY sid DESC;");
     } catch (PDOException $e) {
         die("We are unable to process your request. Please try again later.");
     }
@@ -197,6 +207,23 @@ function get_items_owned_by($uid) {
         return $stmt->fetchAll();
     } catch (PDOException $e) {
         die("We are unable to process your request. Please try again later.");
+    }
+}
+
+function get_items_borrowed_by($uid) {
+    global $db;
+
+    try {
+        $stmt = $db->prepare("SELECT s.sid, s.name, s.description, s.pickup_date, s.pickup_locn, s.return_date, s.return_locn, s.is_available
+                              FROM ss_bid b, ss_stuff s
+                              WHERE b.sid = s.sid AND b.uid = :uid
+                              AND s.is_available = false AND b.bid_amount =
+                              (SELECT MAX(b2.bid_amount) as max_bid FROM ss_bid b2 WHERE b2.sid = b.sid);");
+        $stmt->bindParam(':uid', $uid, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    } catch (PDOException $e) {
+        die("We are unable to process your request. Please try again later.".$e);
     }
 }
 
