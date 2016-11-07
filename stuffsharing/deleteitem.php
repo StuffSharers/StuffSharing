@@ -97,7 +97,10 @@ if ($is_owner && $confirm_delete) {
                             <div class="btn-group">
                                 <button type="submit" class="btn btn-danger"><i class="fa fa-exclamation-triangle" aria-hidden="true" role="group"></i> Delete item</button></div>
                             <div class="btn-group">
-                                <button type="none" class="btn btn-info"><i class="fa fa-undo" aria-hidden="true" role="group"></i> Back</button></div>
+                                <a class="btn btn-info" role="group" href='<?="item.php?id=".$sid?>'>
+                                    <i class="fa fa-undo" aria-hidden="true"></i> Back
+                                </a>
+                            </div>
                         </form>
 <?php endif ?>
                     </div>
