@@ -69,13 +69,6 @@ if (isset($_POST["stuff-name"], $_POST["stuff-desc"], $_POST["stuff-price"], $_P
 	try {
 		$pickupdate = gen_date_from_datetime_local_str($_POST["pickup-date"]);
 		$returndate = gen_date_from_datetime_local_str($_POST["return-date"]);
-		
-		if (!is_pickup_date_within_range($pickupdate)) {
-			$message .= gen_alert('danger', "Invalid pickup date: Must be beyond the current time");
-			$success = false;
-		} else {
-			$last_pickupdate = $pickupdate;
-		}
 
 		if (!is_valid_pickup_and_return_date($pickupdate, $returndate)) {
 			$message .= gen_alert('danger', "Invalid pickup and return dates: return date must be later than pickup date");
