@@ -192,7 +192,7 @@ function get_items_owned_by($uid) {
     }
 }
 
-function search_available_items($str_array, $min_price, $max_price, $pickup_start, $pickup_end, $return_start, $return_end) {
+function search_available_items($str_array, $min_price, $max_price, $pickup_start, $pickup_end, $return_start, $return_end, $no_bids) {
     global $db;
 
     try {
@@ -212,6 +212,7 @@ function search_available_items($str_array, $min_price, $max_price, $pickup_star
         $statement .= empty($pickup_end) ? "" : " AND pickup_date <= :pickup_end";
         $statement .= empty($return_start) ? "" : " AND return_date >= :return_start";
         $statement .= empty($return_end) ? "" : " AND return_date <= :return_end";
+        $statement .= ($no_bids === "on") ? " AND NOT EXISTS (SELECT 1 FROM available_stuff s, ss_bid b WHERE s.sid = b.sid)" : "";
         $statement .= " ORDER BY sid DESC;";
         $stmt = $db->prepare($statement, array(PDO::ATTR_EMULATE_PREPARES=>true));
         foreach ($words as $word_i=>$word) {

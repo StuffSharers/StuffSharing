@@ -9,10 +9,11 @@ $pickup_start = isset($_GET["pickup_start"]) ? neutralize_input($_GET["pickup_st
 $pickup_end = isset($_GET["pickup_end"]) ? neutralize_input($_GET["pickup_end"]) : "";
 $return_start = isset($_GET["return_start"]) ? neutralize_input($_GET["return_start"]) : "";
 $return_end = isset($_GET["return_end"]) ? neutralize_input($_GET["return_end"]) : "";
+$no_bids = isset($_GET["no_bids"]) ? neutralize_input($_GET["no_bids"]) : "";
 $has_query = isset($_GET["q"]);
+var_dump($_GET);
 
-
-if ($has_query) {
+if ($has_query) {	
 	$pickup_startdate = empty($pickup_start) ? "" : DateTime::createFromFormat("d/m/Y", $pickup_start);
 	$pickup_enddate = empty($pickup_end) ? "" : DateTime::createFromFormat("d/m/Y", $pickup_end);
 	$return_startdate = empty($return_start) ? "" : DateTime::createFromFormat("d/m/Y", $return_start);
@@ -37,7 +38,7 @@ if ($has_query) {
         $message = gen_alert('danger', "Earliest date for return is later than latest date");
 	} else {
 		$error = false;
-        $results = search_available_items($str_array, $min_price, $max_price, $pickup_start, $pickup_end, $return_start, $return_end);
+        $results = search_available_items($str_array, $min_price, $max_price, $pickup_start, $pickup_end, $return_start, $return_end, $no_bids);
     }
 
 }
@@ -116,6 +117,12 @@ if ($has_query) {
 						 				<div class="col-sm-4">
 						 					<input type="text" name="return_end" class="form-control input-sm">
 						 				</div>
+						 			</div>
+						 		</div>
+						 		<div role="form">
+						 			<span class="dropdown-header"><i class="fa fa-calendar" aria-hidden="true"></i> Other options</span>
+						 			<div class="checkbox" style="left:15px">
+						 				<label><input type="checkbox" name="no_bids" /> Only show stuff with no bids</label>
 						 			</div>
 						 		</div>
 					        </div>
