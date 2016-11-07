@@ -11,7 +11,6 @@ $return_start = isset($_GET["return_start"]) ? neutralize_input($_GET["return_st
 $return_end = isset($_GET["return_end"]) ? neutralize_input($_GET["return_end"]) : "";
 $no_bids = isset($_GET["no_bids"]) ? neutralize_input($_GET["no_bids"]) : "";
 $has_query = isset($_GET["q"]);
-var_dump($_GET);
 
 if ($has_query) {	
 	$pickup_startdate = empty($pickup_start) ? "" : DateTime::createFromFormat("d/m/Y", $pickup_start);
