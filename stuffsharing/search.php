@@ -66,7 +66,7 @@ if ($has_query) {
         </div>
         <!-- /.row -->
 
-        <!-- Main Row -->
+        <!-- Row for search bar -->
         <div class="row">
             <div class="col-lg-12">
             	<form>
@@ -139,7 +139,11 @@ if ($has_query) {
                 </form>
                 <?php if ($has_query and $error): ?><?=$message?><?php endif ?>
             </div>
+        </div>
+        <!-- /.row> -->
 
+        <!-- Row for search results -->
+        <div class="row">
             <?php if ($has_query and !$error): ?><?php foreach($results as $result): ?><div class="col-md-4 col-sm-6 portfolio-item">
                 <a href="item.php?id=<?=$result["sid"]?>"><img class="img-responsive" src="//placehold.it/700x400" alt=""></a>
                 <h3><a href="item.php?id=<?=$result["sid"]?>"><?=$result["name"]?></a></h3>
