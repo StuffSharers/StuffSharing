@@ -4,6 +4,9 @@ require("include/functions.php");
 
 $sid = isset($_GET["id"]) ? $_GET["id"] : "";
 $to_close = isset($_POST["close"]) && $_POST["close"] == "1";
+$to_retract = isset($_POST["retract"]) && $_POST["retract"] == "1";
+$to_bid = isset($_POST["bid"], $_POST["bid_amount"]) &&
+          $_POST["bid"] == "1" && is_numeric($_POST["bid_amount"]);
 
 if (!ctype_digit($sid)) {
     die();
@@ -15,15 +18,9 @@ if ($item == false) {
 }
 
 if ($is_authed) {
-    $max_bid = get_max_bid($sid);
-    if ($max_bid != false) {
-        $max_bid_username = get_username_for_bid($sid, $max_bid);
-        if ($max_bid_username == false) {
-            die();
-        }
-    }
+    $curr_uid = $_SESSION["uid"];
 
-    $is_owner = $is_admin || $item["uid"] == $_SESSION["uid"];
+    $is_owner = $is_admin || $item["uid"] == $curr_uid;
     if ($is_owner) {
         $current_bids = get_bids($sid);
         if ($to_close) {
@@ -31,7 +28,28 @@ if ($is_authed) {
             $item["is_available"] = false;
         }
     } else {
-        $your_bid = get_bid_amount_for_user($sid, $_SESSION["uid"]);
+        if ($to_bid) {
+            $bid_amount = $_POST["bid_amount"];
+            $bid_success = upsert_bid($curr_uid, $sid, $bid_amount);
+            if (!$bid_success) {
+                $message = gen_alert("danger", "Someone else has already bid that amount");
+            } else {
+                $message = gen_alert("success", "Bid accepted");
+            }
+
+        } elseif ($to_retract) {
+            delete_bid($curr_uid, $sid);
+        }
+
+        $your_bid = get_bid_amount_for_user($sid, $curr_uid);
+    }
+
+    $max_bid = get_max_bid($sid);
+    if ($max_bid != false) {
+        $max_bid_username = get_username_for_bid($sid, $max_bid);
+        if ($max_bid_username == false) {
+            die();
+        }
     }
 }
 
@@ -110,7 +128,7 @@ if ($is_authed) {
         <?php endif ?>
 
                 </dl>
-                <?php if ($item["is_available"] and $current_bids != false): ?><form method="POST"><input type="hidden" name="id" value="<?=$sid?>" /><input type="hidden" name="close" value="1" /><button type="submit" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i> Accept &amp; Close</button></form><?php endif; ?>
+                <?php if ($item["is_available"] and $current_bids != false): ?><form method="POST"><input type="hidden" name="close" value="1" /><button type="submit" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i> Accept &amp; Close</button></form><?php endif; ?>
     <?php else: ?>
 
                 <dl>
@@ -119,9 +137,9 @@ if ($is_authed) {
                 </dl>
                 <dl>
                     <dt>Your bid:</dt>
-                    <dd><?=$your_bid == false ? "None" : $your_bid?></dd>
+                    <dd><?php if ($your_bid != false): ?><form id="retract-form" method="POST"><input type="hidden" name="retract" value="1" /><?=$your_bid?> <a href="#" onclick="document.getElementById('retract-form').submit()"><i class="fa fa-trash" aria-hidden="true"></i> Retract bid</form></a><?php else: ?>None<?php endif; ?></dd>
                 </dl>
-                <div class="row"><div class="col-xs-8"><form method="POST"><div class="input-group input-group-sm"><input class="form-control" type="number" min="0" value="0.00" name="bid_amount" required="required"><span class="input-group-btn"><input type="hidden" name="id" value="<?=$sid?>" /><input type="hidden" name="close" value="1" /><button type="submit" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i> Bid</button></span></div></form></div></div>
+                <div class="row"><div class="col-xs-8"><form method="POST"><div class="input-group input-group-sm"><input class="form-control" type="number" min="ltrim($item["pref_price"], '$')" value="<?=$your_bid == false ? ltrim($item["pref_price"], '$') : ltrim($your_bid, '$')?>" step="0.01" name="bid_amount" required="required"><span class="input-group-btn"><input type="hidden" name="bid" value="1" /><button type="submit" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i> Bid</button></span></div></form><?=$to_bid ? $message : ""?></div></div>
     <?php endif ?>
 <?php else: ?>
                 <p><a href="login.php?redirect=item&id=<?=$sid?>">Login</a> to view bidding details</p>

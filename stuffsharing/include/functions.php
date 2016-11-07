@@ -242,7 +242,8 @@ function get_bids($sid) {
     global $db;
 
     try {
-        $stmt = $db->prepare("SELECT u.username, b.bid_amount FROM ss_bid b, ss_user u WHERE b.sid = :sid AND b.uid = u.uid ORDER BY b.bid_amount DESC;");
+        $stmt = $db->prepare("SELECT u.username, b.bid_amount FROM ss_bid b, ss_user u
+                              WHERE b.sid = :sid AND b.uid = u.uid ORDER BY b.bid_amount DESC;");
         $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll();
@@ -251,31 +252,38 @@ function get_bids($sid) {
     }
 }
 
-function update_bid($uid, $sid, $bid_amount) {
+function upsert_bid($uid, $sid, $bid_amount) {
     global $db;
 
     try {
-        $stmt = $db->prepare("UPDATE ss_bid SET bid_amount = :bid_amount WHERE uid = :uid AND sid = :sid");
+        $statement = "INSERT INTO ss_bid (sid, uid, bid_amount) VALUES (:sid, :uid, :bid_amount)
+                      ON CONFLICT (sid, uid) DO UPDATE SET bid_amount = :bid_amount";
+        $stmt = $db->prepare($statement, array(PDO::ATTR_EMULATE_PREPARES=>true));
         $stmt->bindParam(':uid', $uid, PDO::PARAM_INT);
         $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
         $stmt->bindParam(':bid_amount', $bid_amount, PDO::PARAM_STR);
 
         $stmt->execute();
+        return true;
+
     } catch (PDOException $e) {
-        die("We are unable to process your request. Please try again later.");
+        if ($e->getCode() == 23505) {
+            return false;
+        } else {
+            die("We are unable to process your request. Please try again later.");
+        }
     }
 }
 
-function insert_bid($uid, $sid, $bid_amount) {
+function delete_bid($uid, $sid) {
     global $db;
 
     try {
-        $stmt = $db->prepare("INSERT INTO ss_bid (sid, uid, bid_amount) VALUES (:sid, :uid, :bid_amount)");
+        $stmt = $db->prepare("DELETE FROM ss_bid WHERE uid = :uid AND sid = :sid;");
         $stmt->bindParam(':uid', $uid, PDO::PARAM_INT);
         $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
-        $stmt->bindParam(':bid_amount', $bid_amount, PDO::PARAM_STR);
-
         $stmt->execute();
+
     } catch (PDOException $e) {
         die("We are unable to process your request. Please try again later.");
     }
@@ -316,7 +324,8 @@ function get_username_for_bid($sid, $bid_amount) {
     global $db;
 
     try {
-        $stmt = $db->prepare("SELECT u.username FROM ss_bid b, ss_user u WHERE b.sid = :sid AND b.bid_amount = :bid_amount AND u.uid = b.uid;");
+        $stmt = $db->prepare("SELECT u.username FROM ss_bid b, ss_user u
+                              WHERE b.sid = :sid AND b.bid_amount = :bid_amount AND u.uid = b.uid;");
         $stmt->bindParam(':sid', $sid, PDO::PARAM_INT);
         $stmt->bindParam(':bid_amount', $bid_amount, PDO::PARAM_INT);
         $stmt->execute();
