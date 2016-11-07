@@ -37,7 +37,7 @@ $last_returnloc = "";
 
 $last_stuffname = $item["name"];
 $last_stuffdesc = $item["description"];
-$last_stuffprice = trim($item["pref_price"], "$");
+$last_stuffprice = str_replace(array("$", ","), "", $item["pref_price"]);
 $last_pickupdate = gen_date_from_datetime_local_str($item["pickup_date"]);
 $last_pickuploc = $item["pickup_locn"];
 $last_returndate = gen_date_from_datetime_local_str($item["return_date"]);
