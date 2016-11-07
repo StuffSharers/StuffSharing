@@ -72,12 +72,12 @@ if ($is_authed) {
                 <h3>Details</h3>
                 <dl>
                     <dt>Pickup:</dt>
-                    <dd><i class="fa fa-fw fa-calendar-check-o" aria-hidden="true"></i> <?=date("D d M g:ia", strtotime($item["pickup_date"]))?></dd>
+                    <dd><i class="fa fa-fw fa-calendar-check-o" aria-hidden="true"></i> <?=date("D d M Y g:ia", strtotime($item["pickup_date"]))?></dd>
                     <dd><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <?=$item["pickup_locn"]?></dd>
                 </dl>
                 <dl>
                     <dt>Return:</dt>
-                    <dd><i class="fa fa-fw fa-calendar-check-o" aria-hidden="true"></i> <?=date("D d M g:ia", strtotime($item["return_date"]))?></dd>
+                    <dd><i class="fa fa-fw fa-calendar-check-o" aria-hidden="true"></i> <?=date("D d M Y g:ia", strtotime($item["return_date"]))?></dd>
                     <dd><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <?=$item["return_locn"]?></dd>
                 </dl>
                 <dl>
