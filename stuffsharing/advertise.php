@@ -29,15 +29,13 @@ if (isset($_POST["stuff-name"], $_POST["stuff-desc"], $_POST["stuff-price"], $_P
     global $last_stuffname, $last_stuffdesc, $last_stuffprice, $last_pickupdate, $last_pickuploc, $last_returndate, $last_returnloc;
 
     $message = "";
-
-    $stuffname = neutralize_input($_POST["stuff-name"]);
-    $stuffdesc = neutralize_input($_POST["stuff-desc"]);
-    $stuffprice = neutralize_input($_POST["stuff-price"]);
-    $pickupdate = gen_date_from_datetime_local_str($_POST["pickup-date"]);
-    $pickuploc = neutralize_input($_POST["pickup-location"]);
-    $returndate = gen_date_from_datetime_local_str($_POST["return-date"]);
-    $returnloc = neutralize_input($_POST["return-location"]);
-
+	
+	$stuffname = neutralize_input($_POST["stuff-name"]);
+	$stuffdesc = neutralize_input($_POST["stuff-desc"]);
+	$stuffprice = neutralize_input($_POST["stuff-price"]);	
+	$pickuploc = neutralize_input($_POST["pickup-location"]);
+	$returnloc = neutralize_input($_POST["return-location"]);	
+	
     if (!is_valid_stuffname($stuffname)) {
         $message .= gen_alert('danger', "Invalid item name: Must be 1 - 255 characters");
         $success = false;
@@ -46,7 +44,7 @@ if (isset($_POST["stuff-name"], $_POST["stuff-desc"], $_POST["stuff-price"], $_P
     }
 
     $last_stuffdesc = $stuffdesc;
-
+	
     if (!is_valid_price($stuffprice)) {
         $message .= gen_alert('danger', "Invalid price: Must be a valid positive numeric value");
         $success = false;
@@ -67,14 +65,30 @@ if (isset($_POST["stuff-name"], $_POST["stuff-desc"], $_POST["stuff-price"], $_P
     } else {
         $last_returnloc = $returnloc;
     }
+	
+	try {
+		$pickupdate = gen_date_from_datetime_local_str($_POST["pickup-date"]);
+		$returndate = gen_date_from_datetime_local_str($_POST["return-date"]);
+		
+		if (!is_pickup_date_within_range($pickupdate)) {
+			$message .= gen_alert('danger', "Invalid pickup date: Must be beyond the current time");
+			$success = false;
+		} else {
+			$last_pickupdate = $pickupdate;
+		}
 
-    if (!is_valid_pickup_and_return_date($pickupdate, $returndate)) {
-        $message .= gen_alert('danger', "Invalid pickup and return dates: return date must be later than pickup date");
-        $success = false;
-    } else {
-        $last_pickupdate = $pickupdate;
-        $last_returndate = $returndate;
-    }
+		if (!is_valid_pickup_and_return_date($pickupdate, $returndate)) {
+			$message .= gen_alert('danger', "Invalid pickup and return dates: return date must be later than pickup date");
+			$success = false;
+		} else {
+			$last_pickupdate = $pickupdate;
+			$last_returndate = $returndate;
+		}
+		
+	} catch (Exception $e) {
+        $message .= gen_alert('danger', "Dates should be of the format DD/MM/YYYY");
+        $success = false;		
+	}	
 
 } else {
     //Nothing Posted

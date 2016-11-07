@@ -98,6 +98,14 @@ function is_valid_return_location($return_location) {
     return strlen($return_location) >= 1 && strlen($return_location) <= 255;
 }
 
+function is_pickup_date_within_range($pickup_date) {
+	return $pickup_date >= new DateTime();
+}
+
+function is_return_date_within_range($return_date) {
+	return $return_date->format('Y') <= '9999';
+}
+
 function is_valid_pickup_and_return_date($pickup_date, $return_date) {
     return $pickup_date < $return_date;
 }
