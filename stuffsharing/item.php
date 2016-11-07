@@ -70,7 +70,7 @@ if ($is_authed) {
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header"><?=$item["name"]?>
-                    <small><?=$item["is_available"] ? "available" : "sold"?><?php if ($is_authed && $is_owner): ?> <a href="edititem.php?id=<?=$sid?>">Edit item</a><?php endif ?></small>
+                    <small><?=$item["is_available"] ? "available" : "sold"?><?php if ($is_authed && $is_owner && $item["is_available"]): ?> <a href="edititem.php?id=<?=$sid?>">Edit item</a><?php endif ?></small>
                 </h1>
             </div>
         </div>
